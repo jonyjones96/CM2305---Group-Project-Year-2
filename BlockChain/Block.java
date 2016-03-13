@@ -26,7 +26,9 @@ class Block{
 	public String getPreviousHash(){
 		return value;
 	}
-
+	// add the string to the previous hash to create the current hash and then compare
+	// but i dont know what string to add to hash together
+	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
 	public String getString(){
 		return 
 	}
