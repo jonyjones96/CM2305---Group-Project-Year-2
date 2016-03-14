@@ -23,7 +23,7 @@ class Block{
 		this.pointer = pointer;
 	}
 
-	public String getCurrentHash(){
+	public String getCurrentHash()throws Exception{
 		String s = getString();
 		MessageDigest m=MessageDigest.getInstance("MD5");
 		m.update(s.getBytes(),0,s.length());
@@ -38,7 +38,7 @@ class Block{
 	// but i dont know what string to add to hash together
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
 	public String getString(){
-		String data = String.valueOf(System.currentTimeMillis()) + previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
+		String data = (String.valueOf(System.currentTimeMillis()) + previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
 		return data;
 	}
 	
