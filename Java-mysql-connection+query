@@ -1,0 +1,40 @@
+package query;
+
+import java.sql.*;
+
+public class querying {
+
+	public static void main(String[] args) {
+		try {
+			 Class.forName("com.mysql.jdbc.Driver"); //connecting the to driver for database connection with java application
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+		
+		Connection con = null;
+		try{
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12"); //making connection to my local mysql database, change this if you are connecting to your own
+			if (con != null) {
+    			System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			String var1 = 'abc123'; //use for key comparison
+			ResultSet rs;
+			
+			rs = stat.executeQuery("SELECT value FROM dns WHERE `key` = var1;"); //`key`  , the quotation sign is different then the one on keyboard, so use this
+			while (rs.next()){
+				String value = rs.getString("value");
+				System.out.println("The value is: " + value);  //Printing the query value
+			}		
+			con.close();
+		}
+		catch (SQLException e){
+			System.out.println("Got an exception" );
+			System.out.println(e.getMessage());
+		}
+		
+	}
+
+}
