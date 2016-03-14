@@ -1,6 +1,7 @@
+import java.security.*;
+import java.math.*;
 class Block{
 
-	 
 	private int sellerID;
 	private int buyerID;
 	private int transactionAmount;
@@ -14,23 +15,31 @@ class Block{
 	private Block pointer;
 
 	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,Block pointer){
-		value = newValue;
-		pointer = newPointer;
-
+		this.sellerID = sellerID;
+		this.buyerID = buyerID;
+		this.transactionAmount = transactionAmount;
+		this.levelDifficulty = levelDifficulty;
+		this.previousHash =previousHash;
+		this.pointer = pointer;
 	}
 
 	public String getCurrentHash(){
-		return value;
+		String s = getString();
+		MessageDigest m=MessageDigest.getInstance("MD5");
+		m.update(s.getBytes(),0,s.length());
+		String hash = new BigInteger(1,m.digest()).toString(16);
+		return hash;
 	}
 
 	public String getPreviousHash(){
-		return value;
+		return previousHash;
 	}
 	// add the string to the previous hash to create the current hash and then compare
 	// but i dont know what string to add to hash together
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
 	public String getString(){
-		return 
+		String data = String.valueOf(System.currentTimeMillis()) + previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
+		return data;
 	}
 	
 	public Block getPointer(){
