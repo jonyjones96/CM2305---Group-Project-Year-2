@@ -14,7 +14,9 @@ class BlockChain{
     	 try{
     		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
-    		 // hashCurrentBlock = head.getCurrentHash();
+    		  hashCurrentBlock = head.getCurrentHash();
+
+    		  // System.out.println("New Block hash = " + hashCurrentBlock);
  		 }catch(Exception e){e.printStackTrace();}
  	}
 
@@ -43,7 +45,7 @@ class BlockChain{
 		          hash = tmp.getCurrentHash(); 
 		        }
 		        catch(NullPointerException e){
-		            System.out.print("End");
+		            System.out.print("Beginning");
 		            System.out.println("");
 		        }
 		    }

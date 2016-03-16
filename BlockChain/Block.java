@@ -27,7 +27,7 @@ class Block{
 
 	public String getCurrentHash()throws Exception{
 		try{
-			System.out.println(getString());
+			// System.out.println(getString());
 			String s = getString();
 			MessageDigest m=MessageDigest.getInstance("MD5");
 			m.update(s.getBytes(),0,s.length());
