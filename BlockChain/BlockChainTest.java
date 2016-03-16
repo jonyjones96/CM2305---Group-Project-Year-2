@@ -1,13 +1,16 @@
 class BlockChainTest{
-  public static void main(String[] args) {
-  	BlockChain block = new BlockChain();
+  public static void main(String[] args) throws Exception{
+	  	try{BlockChain block = new BlockChain();
 
-  	// the null part needs work
-  	list.insert (0001,0002,001,5,null);
-    list.insert (0003,0004,008,4,);
-    list.insert (0005,0006,002,4,null);
-    list.insert (0007,0008,005,5,null);
+		  	System.out.println(block.isEmpty ());
+		  	// the null part needs work
+		  	block.insert(121,122,1,5);
+		    block.insert(123,124,8,4);
+		    block.insert(125,126,2,4);
+		    block.insert(127,128,5,5);
 
-    list.print ();
-  }
+		    block.print ();
+	  	}
+	  	catch(Exception e){e.printStackTrace();}
+	}
 }

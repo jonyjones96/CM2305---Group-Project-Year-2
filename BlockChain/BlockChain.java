@@ -1,5 +1,6 @@
 class BlockChain{
 	private Block head = null;
+	private String hashCurrentBlock = null;
 
 	public BlockChain(){
 
@@ -9,36 +10,43 @@ class BlockChain{
     	else return false;
   	}
 
-    public void insert (int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash) {
-    	head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,previousHash,head);
+    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty)throws Exception {
+    	 try{
+    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,head);
+    		 hashCurrentBlock = head.getCurrentHash();
+ 		 }catch(Exception e){e.printStackTrace();}
  	}
 
  	public boolean has (String hash)throws Exception {
-    	Block tmp = head;
+ 		try{
+	    	Block tmp = head;
 
-	    while(tmp != null){
-	      String value = tmp.getCurrentHash();
-	      if (hash == value)return true;
-	      tmp = tmp.getPointer();
-	    } 
-	    return false;
+		    while(tmp != null){
+		      String value = tmp.getCurrentHash();
+		      if (hash == value)return true;
+		      tmp = tmp.getPointer();
+		    } 
+		    return false;
+		}catch(Exception e){e.printStackTrace();return false;}
   	}
 
   	public void print ()throws Exception {
-    	Block tmp = head;
-	    String hash = head.getCurrentHash();
-	    while(tmp != null)
-	      {
-	        try{
-	          System.out.print("[" + hash+ "] -> ");
-	          tmp = tmp.getPointer();
-	          hash = tmp.getCurrentHash(); 
-	        }
-	        catch(NullPointerException e){
-	            System.out.print("End");
-	            System.out.println("");
-	        }
-	      }
-  	}
-
+  		try{
+	    	Block tmp = head;
+		    String hash = head.getCurrentHash();
+		    while(tmp != null)
+		    {
+		        try{
+		          System.out.print("[" + hash+ "] -> ");
+		          tmp = tmp.getPointer();
+		          hash = tmp.getCurrentHash(); 
+		        }
+		        catch(NullPointerException e){
+		            System.out.print("End");
+		            System.out.println("");
+		        }
+		    }
+  		}
+  	catch(Exception e){e.printStackTrace();}
+  }
 }

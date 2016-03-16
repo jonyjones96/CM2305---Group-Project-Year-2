@@ -24,13 +24,14 @@ class Block{
 	}
 
 	public String getCurrentHash()throws Exception{
-		String s = getString();
-		MessageDigest m=MessageDigest.getInstance("MD5");
-		m.update(s.getBytes(),0,s.length());
-		String hash = new BigInteger(1,m.digest()).toString(16);
-		return hash;
+		try{
+			String s = getString();
+			MessageDigest m=MessageDigest.getInstance("MD5");
+			m.update(s.getBytes(),0,s.length());
+			String hash = new BigInteger(1,m.digest()).toString(16);
+			return hash;
+		}catch(Exception e){ return null;}
 	}
-
 	public String getPreviousHash(){
 		return previousHash;
 	}
