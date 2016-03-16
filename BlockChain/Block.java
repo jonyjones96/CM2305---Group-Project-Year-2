@@ -21,14 +21,18 @@ class Block{
 		this.levelDifficulty = levelDifficulty;
 		this.previousHash =previousHash;
 		this.pointer = pointer;
+		// test to make sure the output are the same
+		// System.out.println("sellerID = "+sellerID+"buyerID = "+buyerID+" transactionAmount = " +transactionAmount+" levelDifficulty = "+levelDifficulty +" previousHash = "+previousHash );
 	}
 
 	public String getCurrentHash()throws Exception{
 		try{
+			System.out.println(getString());
 			String s = getString();
 			MessageDigest m=MessageDigest.getInstance("MD5");
 			m.update(s.getBytes(),0,s.length());
 			String hash = new BigInteger(1,m.digest()).toString(16);
+
 			return hash;
 		}catch(Exception e){ return null;}
 	}
@@ -36,10 +40,10 @@ class Block{
 		return previousHash;
 	}
 	// add the string to the previous hash to create the current hash and then compare
-	// but i dont know what string to add to hash together
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
+	// the time of the hash has been excluded atm to simplify the process
 	public String getString(){
-		String data = (String.valueOf(System.currentTimeMillis()) + previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
+		String data = (previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
 		return data;
 	}
 	

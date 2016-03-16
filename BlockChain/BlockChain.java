@@ -13,7 +13,8 @@ class BlockChain{
     public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty)throws Exception {
     	 try{
     		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,head);
-    		 hashCurrentBlock = head.getCurrentHash();
+    		 // test to check if the hashes are the same each time you run BlockChainTest.java
+    		 // hashCurrentBlock = head.getCurrentHash();
  		 }catch(Exception e){e.printStackTrace();}
  	}
 

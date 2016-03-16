@@ -13,6 +13,9 @@ import java.security.*;
            String hash = new BigInteger(1,m.digest()).toString(16);
            // System.out.println("MD5: "+ (new BigInteger(1,m.digest()).toString(16)));
            System.out.println("MD5: " + hash);
+
        }
 
    }
+
+
