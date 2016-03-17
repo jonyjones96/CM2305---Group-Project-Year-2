@@ -49,7 +49,7 @@ class BlockChain{
 		    {
 		        try{
 		          System.out.print("[" + hash+ "] -> ");
-		          //copytpDB(hash);
+		          //copytoDB(hash);
 		          tmp = tmp.getPointer();
 		          hash = tmp.getCurrentHash(); 
 		        }
