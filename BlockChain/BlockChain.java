@@ -1,3 +1,11 @@
+
+/* FOR MYSQL CONNECTIONS */
+// import java.sql.Connection;		
+// import java.sql.DriverManager;
+// import java.sql.SQLException;
+// import java.sql.Statement;
+// import java.sql.PreparedStatement;
+
 class BlockChain{
 	private Block head = null;
 	private String hashCurrentBlock = null;
@@ -41,6 +49,7 @@ class BlockChain{
 		    {
 		        try{
 		          System.out.print("[" + hash+ "] -> ");
+		          //copytpDB(hash);
 		          tmp = tmp.getPointer();
 		          hash = tmp.getCurrentHash(); 
 		        }
@@ -52,4 +61,30 @@ class BlockChain{
   		}
   	catch(Exception e){e.printStackTrace();}
   }
+
+/* FOR MYSQL CONNECTION */
+  //   public void copytoDB(String some_hash) throws Exception {
+		// try {
+		// 	Class.forName("com.mysql.jdbc.Driver");
+		// } catch (ClassNotFoundException err){
+		// 	System.out.println(err);
+		// }
+		// Connection conn = null;
+		// //Statement stmt = null;
+		// try {
+		// 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" );
+		// 	if (conn!= null){
+		// 		//System.out.println("Connected");
+		// 	//System.out.println("Inserting records...");
+			
+		// 	PreparedStatement pstmt = conn.prepareStatement("INSERT INTO blockChain " + "VALUES ('121.131.0.1', 'groupeleven.com', 'Group11 Ltd.', ?)");
+		// 	pstmt.setString(1, some_hash);
+		// 	pstmt.executeUpdate();
+		// 	}
+		// }
+		// catch (SQLException e){
+		// 	System.out.println("Got an exception");
+		// 	System.out.println(e.getMessage());
+		// }
+  // 	}
 }
