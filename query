@@ -1,0 +1,24 @@
+# comments
+
+# I could not find another way to query the DNS other than using the built-in function of BIND, I guess this is the limitation.
+# The following is how to query a "value"(IP address) by having a "Domain_Name"
+
+# lookup a specific host
+nslookup www.example.com
+# get MX and NS records for the domain
+nslookup -type=ANY example.com
+# get SOA record and display all nslookup default parameters
+nslookup -all -type=SOA example.com
+
+#Example:
+nslookup www.example.com
+# will return
+Server: ns1.example.com
+Address: 192.168.2.53
+
+Name: www.example.com
+Address: 192.168.2.80
+
+
+#To check if a server host exists, use:
+nslookup 192.168.2.80     #The IP is representing a server, change it accordingly
