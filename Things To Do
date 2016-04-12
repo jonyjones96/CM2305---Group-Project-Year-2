@@ -1,0 +1,16 @@
+-Check if a blockchain exists
+-start a blockchain on a server
+-register a domain
+  -compare with the blockchain
+    -if true
+      - error
+    -else
+      -buy the domain, add to blockchain
+      -key given
+      
+-update the blockchain and database
+-update an existing record
+  -verify using public and private key
+    -update the blockchain with the new key
+    
+-query a key, give a value
