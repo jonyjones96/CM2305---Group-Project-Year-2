@@ -13,8 +13,10 @@ class Block{
 	private String previousHash;
 	private String currentHash;
 	private Block pointer;
+	private String key;
+	private String value;
 
-	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,Block pointer){
+	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,String key,String value,Block pointer){
 		this.sellerID = sellerID;
 		this.buyerID = buyerID;
 		this.transactionAmount = transactionAmount;
@@ -43,7 +45,7 @@ class Block{
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
 	// the time of the hash has been excluded atm to simplify the process
 	public String getString(){
-		String data = (previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount));
+		String data = (previousHash +String.valueOf(sellerID) + String.valueOf(buyerID) + String.valueOf(transactionAmount) + key + value);
 		return data;
 	}
 	

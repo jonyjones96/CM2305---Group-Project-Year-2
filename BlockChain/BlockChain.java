@@ -18,9 +18,9 @@ class BlockChain{
     	else return false;
   	}
 
-    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty)throws Exception {
+    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value)throws Exception {
     	 try{
-    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,head);
+    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
     		  hashCurrentBlock = head.getCurrentHash();
 
