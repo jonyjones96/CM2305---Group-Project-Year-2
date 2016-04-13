@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.RSA.*;
 public class Start{
 
 	public static void main(String args[]){
@@ -17,7 +18,16 @@ public class Start{
 		else if(option.equals("c" )){
 			System.out.println("Enter the location of the private key: ");
 			// Check weather they have the right to update the key
-			CheckOwner test1 = new CheckOwner();
+			try{
+			RSA test1 = new RSA();
+			String pu = "keyFiles/test3.key";
+			String pr = "keyFiles/test4.key";
+			// test1.generateKeys(pu,pr);
+			String first = "helloworld";
+			byte[] encypted =test1.encryptMessage(pu,first);
+			test1.decryptMessage(pr,encypted);
+		}
+		catch(Exception e){}
 		}	
 		
 	}

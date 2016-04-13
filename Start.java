@@ -1,4 +1,5 @@
 import java.util.Scanner;
+// import java.RSA.*;
 public class Start{
 
 	public static void main(String args[]){
@@ -12,9 +13,22 @@ public class Start{
 		String option;
 		option = user_input.next( );
 
-		if (option == "a" ){}
-		else if(option == "b" ){}
-		else if(option == "c" ){}	
+		if (option.equals("a") ){}
+		else if(option.equals("b") ){}
+		else if(option.equals("c" )){
+			System.out.println("Enter the location of the private key: ");
+			// Check weather they have the right to update the key
+			try{
+			RSA test1 = new RSA();
+			String pu = "keyFiles/test3.key";
+			String pr = "keyFiles/test4.key";
+			// test1.generateKeys(pu,pr);
+			String first = "helloworld";
+			byte[] encypted =test1.encryptMessage(pu,first);
+			test1.decryptMessage(pr,encypted);
+		}
+		catch(Exception e){}
+		}	
 		
 	}
 }
