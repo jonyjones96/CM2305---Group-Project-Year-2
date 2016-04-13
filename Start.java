@@ -6,11 +6,15 @@ public class Start{
 		System.out.println("Please select an option (A,B,C): ");
 		System.out.println("A-Query a Domain ");
 		System.out.println("B-Register a Domain ");
-		System.out.println("C-Change the value of a Domain ");
+		System.out.println("C-Change the value of a Domain");
 
 		Scanner user_input = new Scanner( System.in );
 		String option;
 		option = user_input.next( );
+
+		if (option == "a" ){}
+		else if(option == "b" ){}
+		else if(option == "c" ){}	
 		
 	}
 }
