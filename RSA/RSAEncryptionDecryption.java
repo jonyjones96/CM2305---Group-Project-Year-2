@@ -26,49 +26,17 @@ import javax.crypto.Cipher;
  */
 public class RSAEncryptionDecryption {
 
-	private static final String PUBLIC_KEY_FILE = "Public.key";
-	private static final String PRIVATE_KEY_FILE = "Private.key";
+	private static String PUBLIC_KEY_FILE ;
+	private static String PRIVATE_KEY_FILE ;
 	
-	public static void main(String[] args) throws IOException {
+	public RSAEncryptionDecryption() throws IOException {
+	}
 
-		try {
-			System.out.println("-------GENRATE PUBLIC and PRIVATE KEY-------------");
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-			keyPairGenerator.initialize(2048); //1024 used for normal securities
-			KeyPair keyPair = keyPairGenerator.generateKeyPair();
-			PublicKey publicKey = keyPair.getPublic();
-			PrivateKey privateKey = keyPair.getPrivate();
-			System.out.println("Public Key - " + publicKey);
-			System.out.println("Private Key - " + privateKey);
-
-			//Pullingout parameters which makes up Key
-			System.out.println("\n------- PULLING OUT PARAMETERS WHICH MAKES KEYPAIR----------\n");
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			RSAPublicKeySpec rsaPubKeySpec = keyFactory.getKeySpec(publicKey, RSAPublicKeySpec.class);
-			RSAPrivateKeySpec rsaPrivKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
-			System.out.println("PubKey Modulus : " + rsaPubKeySpec.getModulus());
-			System.out.println("PubKey Exponent : " + rsaPubKeySpec.getPublicExponent());
-			System.out.println("PrivKey Modulus : " + rsaPrivKeySpec.getModulus());
-			System.out.println("PrivKey Exponent : " + rsaPrivKeySpec.getPrivateExponent());
-			
-			//Share public key with other so they can encrypt data and decrypt thoses using private key(Don't share with Other)
-			System.out.println("\n--------SAVING PUBLIC KEY AND PRIVATE KEY TO FILES-------\n");
-			RSAEncryptionDecryption rsaObj = new RSAEncryptionDecryption();
-			rsaObj.saveKeys(PUBLIC_KEY_FILE, rsaPubKeySpec.getModulus(), rsaPubKeySpec.getPublicExponent());
-			rsaObj.saveKeys(PRIVATE_KEY_FILE, rsaPrivKeySpec.getModulus(), rsaPrivKeySpec.getPrivateExponent());
-			
-			//Encrypt Data using Public Key
-			byte[] encryptedData = rsaObj.encryptData("Anuj Patel - Classified Information !");
-			
-			//Descypt Data using Private Key
-			rsaObj.decryptData(encryptedData);
-			
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-		}
-
+	public void setPrivateKey( String filenamePrivate){
+		PRIVATE_KEY_FILE = filenamePrivate;
+	}
+	public void setPublicKey(String filenamePublic){
+		PUBLIC_KEY_FILE = filenamePublic;
 	}
 	
 	/**
@@ -78,7 +46,7 @@ public class RSAEncryptionDecryption {
 	 * @param exp
 	 * @throws IOException
 	 */
-	private void saveKeys(String fileName,BigInteger mod,BigInteger exp) throws IOException{
+	public void saveKeys(String fileName,BigInteger mod,BigInteger exp) throws IOException{
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		
@@ -110,7 +78,7 @@ public class RSAEncryptionDecryption {
 	 * @param data
 	 * @throws IOException
 	 */
-	private byte[] encryptData(String data) throws IOException {
+	public byte[] encryptData(String data) throws IOException {
 		System.out.println("\n----------------ENCRYPTION STARTED------------");
 		
 		System.out.println("Data Before Encryption :" + data);
@@ -136,7 +104,7 @@ public class RSAEncryptionDecryption {
 	 * @param data
 	 * @throws IOException
 	 */
-	private void decryptData(byte[] data) throws IOException {
+	public void decryptData(byte[] data) throws IOException {
 		System.out.println("\n----------------DECRYPTION STARTED------------");
 		byte[] descryptedData = null;
 		
