@@ -45,13 +45,15 @@ class BlockChain{
   		try{
 	    	Block tmp = head;
 		    String hash = head.getCurrentHash();
+		    String value = head.getString();
 		    while(tmp != null)
 		    {
 		        try{
-		          System.out.print("[" + hash+ "] -> ");
+		          System.out.print("[" + hash+ " ] -> ");
 		          //copytoDB(hash);
 		          tmp = tmp.getPointer();
 		          hash = tmp.getCurrentHash(); 
+		          value = tmp.getString();
 		        }
 		        catch(NullPointerException e){
 		            System.out.print("Beginning");

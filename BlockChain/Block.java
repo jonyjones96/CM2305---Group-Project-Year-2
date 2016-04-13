@@ -23,6 +23,8 @@ class Block{
 		this.levelDifficulty = levelDifficulty;
 		this.previousHash =previousHash;
 		this.pointer = pointer;
+		this.key = key;
+		this.value = value;
 		// test to make sure the output are the same
 		// System.out.println("sellerID = "+sellerID+"buyerID = "+buyerID+" transactionAmount = " +transactionAmount+" levelDifficulty = "+levelDifficulty +" previousHash = "+previousHash );
 	}
@@ -53,6 +55,13 @@ class Block{
 		return pointer;
 	}
 
+	public String getKey(){
+		return key;
+	}
+
+	public String getValue(){
+		return value;
+	}
 
 	
 }
