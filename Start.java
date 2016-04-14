@@ -15,8 +15,8 @@ public class Start{
 
 		if (option.equals("a") ){}
 		else if(option.equals("b") ){
-			try{BlockChain block = new BlockChain();
-
+			try{BlockChain block = new BlockChain();  //if statement require here to check if a blockchain exist already
+			
 		  	// System.out.println(block.isEmpty ());
 		 	userInput user = new userInput();
 			String key = userInput.insertKey();
