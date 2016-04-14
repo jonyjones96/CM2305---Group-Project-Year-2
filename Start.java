@@ -13,7 +13,41 @@ public class Start{
 		String option;
 		option = user_input.next( );
 
-		if (option.equals("a") ){}
+		if (option.equals("a") ){
+			userInput user = new userInput();
+			String key = userInput.insertKey();
+			System.out.println("Your key: "+ key);
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			}
+			catch (ClassNotFoundException err) {
+				System.out.println(err);
+			}
+		
+			Connection con = null;
+			try{
+				//my localhost:
+				//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
+				con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1424864","c1424864","oupeg9");
+				if (con != null) {
+    				System.out.println("Connected");
+				}
+				Statement stat = con.createStatement();
+				String SQL = "SELECT value FROM dns WHERE `key` = key;";
+				ResultSet rs;
+				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
+		
+				while (rs.next()){
+					String value = rs.getString("value");
+					System.out.println("The value is: " + value);
+				}		
+				con.close();
+			}
+			catch (SQLException e){
+				System.out.println("Got an exception" );
+				System.out.println(e.getMessage());
+			}
+		}
 		else if(option.equals("b") ){
 			try{BlockChain block = new BlockChain();  //if statement require here to check if a blockchain exist already
 			
