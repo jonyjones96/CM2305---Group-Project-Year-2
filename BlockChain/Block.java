@@ -40,6 +40,22 @@ class Block{
 			return hash;
 		}catch(Exception e){ return null;}
 	}
+
+	public int getSellerID() {
+		return sellerID;
+	}
+	
+	public int getBuyerID() {
+		return buyerID;
+	}
+	
+	public int getAmount() {
+		return transactionAmount;
+	}
+	
+	public int getLevel(){
+		return levelDifficulty;
+	}
 	public String getPreviousHash(){
 		return previousHash;
 	}

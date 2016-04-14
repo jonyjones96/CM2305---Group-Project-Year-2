@@ -23,6 +23,14 @@ class BlockChain{
     		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
     		  hashCurrentBlock = head.getCurrentHash();
+    		   	int a_sellID = head.getSellerID();
+  	    		int a_buyID = head.getBuyerID();
+  	    		int a_transaction = head.getAmount();
+  	    		int a_level = head.getLevel();
+  	    		String some_key = head.getKey();
+  	    		String some_value = head.getValue();
+
+  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value); // store to database
 
     		  // System.out.println("New Block hash = " + hashCurrentBlock);
  		 }catch(Exception e){e.printStackTrace();}
@@ -64,29 +72,36 @@ class BlockChain{
   	catch(Exception e){e.printStackTrace();}
   }
 
-/* FOR MYSQL CONNECTION */
-  //   public void copytoDB(String some_hash) throws Exception {
-		// try {
-		// 	Class.forName("com.mysql.jdbc.Driver");
-		// } catch (ClassNotFoundException err){
-		// 	System.out.println(err);
-		// }
-		// Connection conn = null;
-		// //Statement stmt = null;
-		// try {
-		// 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" );
-		// 	if (conn!= null){
-		// 		//System.out.println("Connected");
-		// 	//System.out.println("Inserting records...");
+/* MYSQL CONNECTION */
+  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value) throws Exception {
+		 try {
+		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+		 } catch (ClassNotFoundException err){
+		 	System.out.println(err);
+		 }
+		 
+		 Connection conn = null;
+		 try {
+		 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+		 	if (conn!= null){       // successful connection
+		 	//System.out.println("Connected");
+		 	//System.out.println("Inserting records...");
 			
-		// 	PreparedStatement pstmt = conn.prepareStatement("INSERT INTO blockChain " + "VALUES ('121.131.0.1', 'groupeleven.com', 'Group11 Ltd.', ?)");
-		// 	pstmt.setString(1, some_hash);
-		// 	pstmt.executeUpdate();
-		// 	}
-		// }
-		// catch (SQLException e){
-		// 	System.out.println("Got an exception");
-		// 	System.out.println(e.getMessage());
-		// }
-  // 	}
+		 	// insert values to table called someBlockChain:
+		 	PreparedStatement pstmt = conn.prepareStatement("INSERT INTO someBlockChain " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+		 	pstmt.setInt(1, sell_ID);
+		 	pstmt.setInt(2, buy_ID);
+		 	pstmt.setInt(3, trans_amount);
+		 	pstmt.setInt(4, level_difficulty);
+		 	pstmt.setString(5, previous_hash);
+		 	pstmt.setString(6, a_key);
+		 	pstmt.setString(7, a_value);
+		 	pstmt.executeUpdate();
+		 	}
+		 }
+		 catch (SQLException e){    // if failed connection
+		 	System.out.println("Got an exception");
+		 	System.out.println(e.getMessage());
+		 }
+   	}
 }
