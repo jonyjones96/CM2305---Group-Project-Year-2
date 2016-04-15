@@ -91,7 +91,7 @@ public class RSAEncryptionDecryption {
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey);
 			encryptedData = cipher.doFinal(dataToEncrypt);
-			System.out.println("Encryted Data: " + encryptedData);
+			// System.out.println("Encryted Data: " + encryptedData);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +106,7 @@ public class RSAEncryptionDecryption {
 	 * @param data
 	 * @throws IOException
 	 */
-	public void decryptData(byte[] data) throws IOException {
+	public byte[] decryptData(byte[] data) throws IOException {
 		System.out.println("\n----------------DECRYPTION STARTED------------");
 		byte[] descryptedData = null;
 		
@@ -115,13 +115,15 @@ public class RSAEncryptionDecryption {
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			descryptedData = cipher.doFinal(data);
-			System.out.println("Decrypted Data: " + new String(descryptedData));
+			// System.out.println("Decrypted Data: " + new String(descryptedData));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
+
 		
-		System.out.println("----------------DECRYPTION COMPLETED------------");		
+		System.out.println("----------------DECRYPTION COMPLETED------------");	
+		return descryptedData;	
 	}
 	
 	/**
