@@ -1,4 +1,4 @@
-
+package groupProject;
 
 import java.sql.Connection;		
 import java.sql.DriverManager;
@@ -46,7 +46,7 @@ class BlockChain{
     	 try{
     	 	boolean invalidInsert = check_toinsert(key, value);  // start validation 
     		if (invalidInsert == false){   // if there's no match, insert desire record.
-    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,head);
+    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,publicKey,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
     		  hashCurrentBlock = head.getCurrentHash();
     		   	int a_sellID = head.getSellerID();
@@ -55,10 +55,10 @@ class BlockChain{
   	    		int a_level = head.getLevel();
   	    		String some_key = head.getKey();
   	    		String some_value = head.getValue();
-				String publicKey = head.getPublicKey();
+				String some_publicKey = head.getPublicKey();
 				System.out.println("Record insertion successful!");
 				// Need to add the publicKey
-  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, publicKey); // store to database
+  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, some_publicKey); // store to database
 			} else {
     			 
     			 System.out.println("This key is invalid. Record already exists.");
@@ -104,7 +104,7 @@ class BlockChain{
   }
 
 /* MYSQL CONNECTION */
-  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value) throws Exception {
+  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value, String publicKey) throws Exception {
 		 try {
 		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 		 } catch (ClassNotFoundException err){
@@ -119,7 +119,7 @@ class BlockChain{
 		 	//System.out.println("Inserting records...");
 			
 		 	// insert values to table called someBlockChain:
-		 	PreparedStatement pstmt = conn.prepareStatement("INSERT INTO someBlockChain " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+		 	PreparedStatement pstmt = conn.prepareStatement("INSERT INTO someBlockChain " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		 	pstmt.setInt(1, sell_ID);
 		 	pstmt.setInt(2, buy_ID);
 		 	pstmt.setInt(3, trans_amount);
@@ -127,6 +127,7 @@ class BlockChain{
 		 	pstmt.setString(5, previous_hash);
 		 	pstmt.setString(6, a_key);
 		 	pstmt.setString(7, a_value);
+		 	pstmt.setString(8, publicKey);
 		 	pstmt.executeUpdate();
 		 	}
 		 }
