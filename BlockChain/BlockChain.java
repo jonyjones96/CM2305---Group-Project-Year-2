@@ -55,10 +55,10 @@ class BlockChain{
   	    		int a_level = head.getLevel();
   	    		String some_key = head.getKey();
   	    		String some_value = head.getValue();
-				
+				String publicKey = head.getPublicKey();
 				System.out.println("Record insertion successful!");
 				// Need to add the publicKey
-  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value); // store to database
+  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, publicKey); // store to database
 			} else {
     			 
     			 System.out.println("This key is invalid. Record already exists.");

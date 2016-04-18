@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.sql.*;
 import java.util.Date;
 import java.util.Random;
+import java.io.*;
 // import java.RSA.*;
 public class Start{
 
@@ -66,13 +67,15 @@ public class Start{
 			System.out.println("Your value: "+ userValue);
 			System.out.println("Insert the name for the private key file: ");
 			privateKeyName = user_input.next( );
-			
+			publicKeyName = "publicKey.key";
 			int buyerID = 101;
 			int sellerID = 122;
 			int transactionAmount = key.length();
 			int levelOfDifficulty = userValue.length();
+			keyCreater.generateKeys(publicKeyName,privateKeyName);
+			String publicKeyString = getPublicKeyString();
 		 	
-		 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue);
+		 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,publicKeyString);
 			//block.insert(121,122,1,5,"google.com","74.125.224.72");
 			//block.insert(123,124,8,4,"facebook.com","69.63.176.13");
 			//block.insert(125,126,2,4,"github.com","192.30.252.0");
@@ -115,5 +118,34 @@ public class Start{
 	      }
 	      return out;
 	    }
+
+	  public static String getPublicKeyString(){
+	  	// FileWriter writer = null;
+		BufferedReader reader = null;
+		String total = "";
+		try {
+			// writer = new FileWriter("test12.key");
+		    File file = new File("public.key");
+		    reader = new BufferedReader(new FileReader(file));
+
+		    String line;
+		    while ((line = reader.readLine()) != null) {
+		        total = total +line ;
+		        
+		    }
+		    // System.out.println(total);
+			// writer.write(total);
+		}catch (IOException e) {
+		    e.printStackTrace();
+		} finally {
+		    try {
+		        reader.close();
+		        writer.close();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		}
+		return total;
+	  }
 }
 
