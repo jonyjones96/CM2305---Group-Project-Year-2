@@ -1,10 +1,10 @@
 
-/* FOR MYSQL CONNECTIONS */
-// import java.sql.Connection;		
-// import java.sql.DriverManager;
-// import java.sql.SQLException;
-// import java.sql.Statement;
-// import java.sql.PreparedStatement;
+
+import java.sql.Connection;		
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 class BlockChain{
 	private Block head = null;
@@ -17,9 +17,35 @@ class BlockChain{
     	if (head == null) return true;
     	else return false;
   	}
+  	
+  	public boolean check_toinsert (String key, String value) throws Exception { // checks for existing records in the block chain
+		/* Not on full working mode. 
+			* So far, it throws an error if key_toinsert (with same value) comes subsequently 
+			* example: 	insert("bbc.co.uk");
+						insert("bbc.co.uk");    --- SUCCESS: Record wont be inserted ---
+						
+					However, 
+						insert("bbc.co.uk");
+						insert("github.com");
+						insert("bbc.co.uk");	--- FAIL: Record insertion will be successful --- 
+		*/
+		boolean aMatch = false;
+		while ( head != null ) {
+			if (key.equals(head.getKey())) {    // if there is a match return true ( hence true for an invalidinsert -- see insert() )
+				aMatch =  true;					// iteration/comparing stops on an instance of a match
+				break;
+			} else {							// return false otherwise
+				aMatch =  false;
+			}
+			head = head.getPointer();
+		}
+		return aMatch;		
+	}
 
     public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value)throws Exception {
     	 try{
+    	 	boolean invalidInsert = check_toinsert(key, value);  // start validation 
+    		if (invalidInsert == false){   // if there's no match, insert desire record.
     		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
     		  hashCurrentBlock = head.getCurrentHash();
@@ -29,9 +55,13 @@ class BlockChain{
   	    		int a_level = head.getLevel();
   	    		String some_key = head.getKey();
   	    		String some_value = head.getValue();
-
+				
+				System.out.println("Record insertion successful!");
   	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value); // store to database
-
+			} else {
+    			 
+    			 System.out.println("This key is invalid. Record already exists.");
+    		 }
     		  // System.out.println("New Block hash = " + hashCurrentBlock);
  		 }catch(Exception e){e.printStackTrace();}
  	}
