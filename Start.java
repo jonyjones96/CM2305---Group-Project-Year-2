@@ -86,16 +86,31 @@ public class Start{
 	  		catch(Exception e){e.printStackTrace();}
 		}
 		else if(option.equals("c" )){
+			System.out.println("Enter the name of the key: ");
+			String keyName = user_input.next( );
 			System.out.println("Enter the location of the private key: ");
 			// Check weather they have the right to update the key
 			try{
-			RSA test1 = new RSA();
-			String pu = "keyFiles/test3.key";
-			String pr = "keyFiles/test4.key";
-			// test1.generateKeys(pu,pr);
-			String first = "helloworld";
-			byte[] encypted =test1.encryptMessage(pu,first);
-			test1.decryptMessage(pr,encypted);
+			RSA keyTransfer = new RSA();
+			String pr;
+			// gets teh private key from the user
+			String privateKeyName = user_input.next( );
+			// gets the public key from the database
+			String publicKeyLocation = getPublicKey(keyName);
+			// generates a random string
+			String randomKey= generateRandomString(10);
+			// Encrypts the string
+			byte[] encypted =keyTransfer.encryptMessage(publicKeyLocation,randomKey);
+			// decrypts the message using the private key
+			String decryptedMessage = new String(keyTransfer.decryptMessage(privateKeyName,encypted));
+
+			// Compares the message to see if the owner is who they say they are
+			if(randomKey.equals(decryptedMessage)){
+				System.out.println("New value: ");
+				String value = user_input.next( );
+				// needs to update the database and blockchain
+			}
+
 		}
 		catch(Exception e){}
 		}	
@@ -146,6 +161,12 @@ public class Start{
 		    }
 		}
 		return total;
+	  }
+
+
+
+	  public static String getPublicKey(String key){
+	  	// needs to search for the key in the database and get the public key and return it.
 	  }
 }
 
