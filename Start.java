@@ -1,4 +1,4 @@
-package BlockchainDb;
+package groupProject;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -140,7 +140,7 @@ public class Start{
 		} finally {
 		    try {
 		        reader.close();
-		        writer.close();
+		        //writer.close();
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
@@ -148,4 +148,3 @@ public class Start{
 		return total;
 	  }
 }
-
