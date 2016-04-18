@@ -43,9 +43,14 @@ public class Start{
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
 				
-				/*if (rs.getString("a_value") == ""){
+				try{
+					if (rs.getString("a_value") == ""){
+						
+					}
+				}
+				catch (SQLException e){
 					System.out.println("System unable to get your request, make sure the key exists" );
-				}*/
+				}
 				while (rs.next()){
 					String value = rs.getString("a_value");
 					System.out.println("The value is: " + value);
