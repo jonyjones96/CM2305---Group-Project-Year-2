@@ -1,4 +1,4 @@
-package groupProject;
+package BlockchainDb;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -33,17 +33,17 @@ public class Start{
 			try{
 				//my localhost:
 				//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
-				con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1424864","c1424864","oupeg9");
+				con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
 				if (con != null) {
     				System.out.println("Connected");
 				}
 				Statement stat = con.createStatement();
-				String SQL = "SELECT value FROM dns WHERE `key` =" + key;
+				String SQL = "SELECT a_value FROM someBlockChain WHERE `a_key` = '" + key + "'";
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
 		
 				while (rs.next()){
-					String value = rs.getString("value");
+					String value = rs.getString("a_value");
 					System.out.println("The value is: " + value);
 				}		
 				con.close();
@@ -111,3 +111,4 @@ public class Start{
 	      return out;
 	    }
 }
+
