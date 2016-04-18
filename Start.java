@@ -55,13 +55,18 @@ public class Start{
 		}
 		else if(option.equals("b") ){
 			try{BlockChain block = new BlockChain();  //if statement require here to check if a blockchain exist already
-			
+			RSA keyCreater = new RSA();
 		  	// System.out.println(block.isEmpty ());
 		 	userInput user = new userInput();
 			String key = userInput.insertKey();
 			String userValue = userInput.insertValue();
+			String privateKeyName;
+			String publicKeyName;
 			System.out.println("Your key: "+ key);
 			System.out.println("Your value: "+ userValue);
+			System.out.println("Insert the name for the private key file: ");
+			privateKeyName = user_input.next( );
+			
 			int buyerID = 101;
 			int sellerID = 122;
 			int transactionAmount = key.length();

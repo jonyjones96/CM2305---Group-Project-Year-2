@@ -42,7 +42,7 @@ class BlockChain{
 		return aMatch;		
 	}
 
-    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value)throws Exception {
+    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value,String publicKey)throws Exception {
     	 try{
     	 	boolean invalidInsert = check_toinsert(key, value);  // start validation 
     		if (invalidInsert == false){   // if there's no match, insert desire record.
@@ -57,6 +57,7 @@ class BlockChain{
   	    		String some_value = head.getValue();
 				
 				System.out.println("Record insertion successful!");
+				// Need to add the publicKey
   	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value); // store to database
 			} else {
     			 

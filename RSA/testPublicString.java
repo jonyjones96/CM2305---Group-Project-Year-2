@@ -6,34 +6,8 @@ public class testPublicString {
 	
 	public static void main(String[] args) {	
 		// FileReader reader = null;
-		 FileWriter writer = null;
-		//  byte[] test =null;
-		// try {
-		//     reader = new FileReader("public.key");
-		//     // writer = new FileWriter("test10.key");
-		//     int a = 0;
-		//         while ((a = reader.read()) != -1) {
-		//              // writer.write(a);
-		//             // System.out.println(a);
-		//              test = test + a.getBytes();
-		//         }
-		//         // System.out.println(test);
-		//         // writer.write(test);
-
-		//     } catch (FileNotFoundException e) {
-		//     e.printStackTrace();
-		// } catch (IOException e) {
-		//     e.printStackTrace();
-		// } finally {
-		//     try {
-		//         reader.close();
-		//         writer.close();
-		//     } catch (IOException e) {
-		//         e.printStackTrace();
-		//     }
-		// }
-	
-		 BufferedReader reader = null;
+		FileWriter writer = null;
+		BufferedReader reader = null;
 		String total = "";
 		try {
 			writer = new FileWriter("test12.key");
@@ -60,3 +34,28 @@ public class testPublicString {
 	 }
 
 }
+//  byte[] test =null;
+		// try {
+		//     reader = new FileReader("public.key");
+		//     // writer = new FileWriter("test10.key");
+		//     int a = 0;
+		//         while ((a = reader.read()) != -1) {
+		//              // writer.write(a);
+		//             // System.out.println(a);
+		//              test = test + a.getBytes();
+		//         }
+		//         // System.out.println(test);
+		//         // writer.write(test);
+
+		//     } catch (FileNotFoundException e) {
+		//     e.printStackTrace();
+		// } catch (IOException e) {
+		//     e.printStackTrace();
+		// } finally {
+		//     try {
+		//         reader.close();
+		//         writer.close();
+		//     } catch (IOException e) {
+		//         e.printStackTrace();
+		//     }
+		// }
