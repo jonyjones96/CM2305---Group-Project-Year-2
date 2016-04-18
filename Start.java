@@ -42,19 +42,14 @@ public class Start{
 				String SQL = "SELECT a_value FROM someBlockChain WHERE `a_key` = '" + key + "'";
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
-				
-				try{
-					if (rs.getString("a_value") == ""){
-						
-					}
-				}
-				catch (SQLException e){
-					System.out.println("System unable to get your request, make sure the key exists" );
-				}
+				String value = " ";
 				while (rs.next()){
-					String value = rs.getString("a_value");
+					value = rs.getString("a_value");
 					System.out.println("The value is: " + value);
 				}		
+				if ( value == " "){
+					System.out.println("System unable to get your request, make sure the key exists" );
+				}
 				con.close();
 			}
 			catch (SQLException e){
