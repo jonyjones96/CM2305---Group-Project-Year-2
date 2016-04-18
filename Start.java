@@ -36,13 +36,16 @@ public class Start{
 				//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
 				con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
 				if (con != null) {
-    				System.out.println("Connected");
+    				//System.out.println("Connected");
 				}
 				Statement stat = con.createStatement();
 				String SQL = "SELECT a_value FROM someBlockChain WHERE `a_key` = '" + key + "'";
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
-		
+				
+				/*if (rs.getString("a_value") == ""){
+					System.out.println("System unable to get your request, make sure the key exists" );
+				}*/
 				while (rs.next()){
 					String value = rs.getString("a_value");
 					System.out.println("The value is: " + value);
@@ -50,7 +53,6 @@ public class Start{
 				con.close();
 			}
 			catch (SQLException e){
-				System.out.println("System unable to get your request, make sure the key exists" );
 				System.out.println(e.getMessage());
 			}
 		}
@@ -67,6 +69,7 @@ public class Start{
 			System.out.println("Your value: "+ userValue);
 			System.out.println("Insert the name for the private key file: ");
 			privateKeyName = user_input.next( );
+			System.out.println("Your private key file name is: " +privateKeyName );
 			publicKeyName = "publicKey.key";
 			int buyerID = 101;
 			int sellerID = 122;
@@ -86,31 +89,16 @@ public class Start{
 	  		catch(Exception e){e.printStackTrace();}
 		}
 		else if(option.equals("c" )){
-			System.out.println("Enter the name of the key: ");
-			String keyName = user_input.next( );
 			System.out.println("Enter the location of the private key: ");
 			// Check weather they have the right to update the key
 			try{
-			RSA keyTransfer = new RSA();
-			String pr;
-			// gets teh private key from the user
-			String privateKeyName = user_input.next( );
-			// gets the public key from the database
-			String publicKeyLocation = getPublicKey(keyName);
-			// generates a random string
-			String randomKey= generateRandomString(10);
-			// Encrypts the string
-			byte[] encypted =keyTransfer.encryptMessage(publicKeyLocation,randomKey);
-			// decrypts the message using the private key
-			String decryptedMessage = new String(keyTransfer.decryptMessage(privateKeyName,encypted));
-
-			// Compares the message to see if the owner is who they say they are
-			if(randomKey.equals(decryptedMessage)){
-				System.out.println("New value: ");
-				String value = user_input.next( );
-				// needs to update the database and blockchain
-			}
-
+			RSA test1 = new RSA();
+			String pu = "keyFiles/test3.key";
+			String pr = "keyFiles/test4.key";
+			// test1.generateKeys(pu,pr);
+			String first = "helloworld";
+			byte[] encypted =test1.encryptMessage(pu,first);
+			test1.decryptMessage(pr,encypted);
 		}
 		catch(Exception e){}
 		}	
@@ -161,11 +149,5 @@ public class Start{
 		    }
 		}
 		return total;
-	  }
-
-
-
-	  public static String getPublicKey(String key){
-	  	// needs to search for the key in the database and get the public key and return it.
 	  }
 }
