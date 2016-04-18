@@ -49,7 +49,7 @@ public class Start{
 				con.close();
 			}
 			catch (SQLException e){
-				System.out.println("Got an exception" );
+				System.out.println("System unable to get your request, make sure the key exists" );
 				System.out.println(e.getMessage());
 			}
 		}
