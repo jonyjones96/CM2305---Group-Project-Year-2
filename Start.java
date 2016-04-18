@@ -1,4 +1,4 @@
-package BlockchainDb;
+package groupProject;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -155,7 +155,7 @@ public class Start{
 		} finally {
 		    try {
 		        reader.close();
-		        writer.close();
+		        //writer.close();
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
@@ -169,4 +169,3 @@ public class Start{
 	  	// needs to search for the key in the database and get the public key and return it.
 	  }
 }
-
