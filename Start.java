@@ -101,12 +101,6 @@ public class Start{
 			String privateKey = user_input.next( );	
 			
 			
-			
-			
-			
-			
-			
-			
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 			}
@@ -126,23 +120,24 @@ public class Start{
 				String SQL = "SELECT publicKey FROM someBlockChain WHERE `a_key` = '" + key + "'";
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
-				String pu;
+				String pu = "";
 				while (rs.next()){
 					pu = rs.getString("publicKey");
 				}
 				FileWriter writer = null;
 				writer = new FileWriter("public.key");
 				writer.write(pu);
+				writer.close();
 				String randomMessage =  generateRandomString(10);
 				String publicKeyLocation = "public.key";
 				byte[] encypted =transferKey.encryptMessage(publicKeyLocation,randomMessage);
-				String decryptedMessage = new String(transferKey.decryptMessage(pr,encypted));
+				String decryptedMessage = new String(transferKey.decryptMessage(privateKey,encypted));
 				if(randomMessage.equals(decryptedMessage)){
 					// update the database
 					System.out.println("Enter the value: ");
 					String value = user_input.next( );
 					SQL = "Update someBlockChain SET a_value = '" + value + "' WHERE `a_key` = '" + key + "'";
-					rs = stat.executeUpdate(SQL);
+					stat.executeUpdate(SQL);
 					
 					
 					// update evryones database
