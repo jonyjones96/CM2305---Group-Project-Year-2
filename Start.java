@@ -60,37 +60,39 @@ public class Start{
 			}
 		}
 		else if(option.equals("b") ){
-			try{BlockChain block = new BlockChain();  //if statement require here to check if a blockchain exist already
-			RSA keyCreater = new RSA();
-		  	// System.out.println(block.isEmpty ());
-		 	userInput user = new userInput();
-			String key = userInput.insertKey();
-			String userValue = userInput.insertValue();
-			String privateKeyName;
-			String publicKeyName;
-			System.out.println("Your key: "+ key);
-			System.out.println("Your value: "+ userValue);
-			System.out.println("Insert the name for the private key file: ");
-			privateKeyName = user_input.next( );
-			System.out.println("Your private key file name is: " +privateKeyName );
-			publicKeyName = "publicKey.key";
-			int buyerID = 101;
-			int sellerID = 122;
-			int transactionAmount = key.length();
-			int levelOfDifficulty = userValue.length();
-			keyCreater.generateKeys(publicKeyName,privateKeyName);
-			String publicKeyString = getPublicKeyString();
-		 	
-		 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,publicKeyString);
-			//block.insert(121,122,1,5,"google.com","74.125.224.72");
-			//block.insert(123,124,8,4,"facebook.com","69.63.176.13");
-			//block.insert(125,126,2,4,"github.com","192.30.252.0");
-			//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
-
-			block.print ();
-	  		}
-	  		catch(Exception e){e.printStackTrace();}
+			try{BlockChain block = new BlockChain();//if statement require here to check if a blockchain exist already
+				createTable table = new createTable();
+				RSA keyCreater = new RSA();
+			  	// System.out.println(block.isEmpty ());
+			 	userInput user = new userInput();
+				String key = userInput.insertKey();
+				String userValue = userInput.insertValue();
+				String privateKeyName;
+				String publicKeyName;
+				System.out.println("Your key: "+ key);
+				System.out.println("Your value: "+ userValue);
+				System.out.println("Insert the name for the private key file: ");
+				privateKeyName = user_input.next( );
+				System.out.println("Your private key file name is: " +privateKeyName );
+				publicKeyName = "publicKey.key";
+				int buyerID = 101;
+				int sellerID = 122;
+				int transactionAmount = key.length();
+				int levelOfDifficulty = userValue.length();
+				keyCreater.generateKeys(publicKeyName,privateKeyName);
+				String publicKeyString = getPublicKeyString();
+			 	
+			 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,publicKeyString);
+				//block.insert(121,122,1,5,"google.com","74.125.224.72");
+				//block.insert(123,124,8,4,"facebook.com","69.63.176.13");
+				//block.insert(125,126,2,4,"github.com","192.30.252.0");
+				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
+			 	
+			 	table.duplicateBchain();
+			}
+			catch(Exception e){e.printStackTrace();}
 		}
+
 		else if(option.equals("c" )){
 			System.out.println("Enter the name of the Domain you want to change: ");
 			String key = user_input.next( );
@@ -123,20 +125,23 @@ public class Start{
 				String pu = "";
 				while (rs.next()){
 					pu = rs.getString("publicKey");
+					//System.out.println(pu);
 				}
 				FileWriter writer = null;
 				writer = new FileWriter("public.key");
 				writer.write(pu);
 				writer.close();
+				
 				String randomMessage =  generateRandomString(10);
+				//System.out.println(randomMessage);
 				String publicKeyLocation = "public.key";
-				byte[] encypted =transferKey.encryptMessage(publicKeyLocation,randomMessage);
+				byte[] encypted = transferKey.encryptMessage(publicKeyLocation,randomMessage);
 				String decryptedMessage = new String(transferKey.decryptMessage(privateKey,encypted));
 				if(randomMessage.equals(decryptedMessage)){
 					// update the database
 					System.out.println("Enter the value: ");
 					String value = user_input.next( );
-					SQL = "Update someBlockChain SET a_value = '" + value + "' WHERE `a_key` = '" + key + "'";
+					SQL = "Update someBlockChain SET `a_value` = '" + value + "' WHERE `a_key` = '" + key + "'";
 					stat.executeUpdate(SQL);
 					
 					
