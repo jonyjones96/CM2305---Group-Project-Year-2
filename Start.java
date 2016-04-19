@@ -9,6 +9,9 @@ import java.io.*;
 public class Start{
 
 	public static void main(String args[]){
+		mainMenu();
+	}
+	public static void mainMenu(){	
 		System.out.println("Welcome to the Decentralised DNS");
 		System.out.println("Please select an option (A,B,C): ");
 		System.out.println("A-Query a Domain ");
