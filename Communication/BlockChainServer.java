@@ -14,8 +14,6 @@ public class BlockChainServer extends Thread {
   }
 
   public void run() {
-    System.out.println("Connected!");
-
     if(!BlockChainClient.isConnected(this.connection.getIpAddress())) {
       BlockChainClient client = new BlockChainClient(connection.getIpAddress());
     }
@@ -24,7 +22,9 @@ public class BlockChainServer extends Thread {
 
     for(BlockChainConnection client : clients) {
       BlockChainServer.sendToClient(this.connection, "CLIENT", client.getIpAddress());
+      System.out.print(client.getIpAddress());
     }
+    System.out.println();
   }
 
   public static void startListening(int port) throws IOException {
