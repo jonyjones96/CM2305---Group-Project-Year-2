@@ -65,7 +65,7 @@ public class createTable {
 			 }
 	}
 	
-	public static void main(String[] args) throws Exception {  // CONCATENATES FIELDS INTO A STRING
+	public void concatFields() {  // CONCATENATES FIELDS INTO A STRING
 		 try {
 			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 			 } catch (ClassNotFoundException err){
@@ -108,5 +108,60 @@ public class createTable {
 			 }
 			 
 			 
-			 }
-	   	}
+		}
+	
+	public void printTable() {			// PRINTS the someBlockChain table
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try{
+			//my localhost:
+			//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
+			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM someBlockChain"); 
+			
+
+			while (rs.next()){
+				// some stuff
+				int sellID = rs.getInt(1);
+				int buyID = rs.getInt(2);
+				int transAmt = rs.getInt(3);
+				int levelDiff = rs.getInt(4);
+				String prevHash = rs.getString(5);
+				String aKey = rs.getString(6);
+				String aValue = rs.getString(7);
+				String pubKey = rs.getString(8);
+				
+				System.out.printf("%6d\t %6d\t %3d\t %3d\t %40s\t %50s\t %20s\t %1000s\t", sellID, buyID, transAmt, levelDiff, prevHash, aKey, aValue, pubKey);
+				System.out.println();
+				}
+			
+			System.out.println();
+			
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (st != null) st.close();
+				if (con != null) con.close();
+			} catch (SQLException e){
+				
+			}
+		}
+	}
+			
+}
