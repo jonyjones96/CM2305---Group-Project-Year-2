@@ -56,11 +56,12 @@ public class RSA{
 		 return siphertext;
 	}
 
-	public byte[] decryptMessage(String privateKey, byte[] encryptedMessage)throws IOException{
+	public byte[] decryptMessage(String privateKey, String encryptedMessage)throws IOException{
+		byte[] en = encryptedMessage.getBytes();
 		byte[] decryptedMessage = null;
 		RSAEncryptionDecryption rsaObj = new RSAEncryptionDecryption();
 		rsaObj.setPrivateKey(privateKey);
-		decryptedMessage = rsaObj.decryptData(encryptedMessage);
+		decryptedMessage = rsaObj.decryptData(en);
 		return decryptedMessage;
 	}
 }
