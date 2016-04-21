@@ -79,8 +79,16 @@ public class Start{
 				int levelOfDifficulty = userValue.length();
 				keyCreater.generateKeys(publicKeyName,privateKeyName);
 				String publicKeyString = getPublicKeyString();
+				// insert random number in db
+				Random rand = new Random();
+				int randomNum = rand.nextInt(100);
+				String message = generateRandomString(10,randomNum);
+				byte[] encryptedMessage = keyCreater.encryptMessage(publicKeyName,message);
+				String encryptedMDB = new String(encryptedMessage);
+				// need to add the randomNum and the encryptedMessageToAddToDatabase to add to the database
+				
 			 	
-			 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,publicKeyString);
+			 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,encryptedMDB,randomNum);
 				//block.insert(121,122,1,5,"google.com","74.125.224.72");
 				//block.insert(123,124,8,4,"facebook.com","69.63.176.13");
 				//block.insert(125,126,2,4,"github.com","192.30.252.0");
@@ -165,22 +173,21 @@ public class Start{
 		
 	}
 	
-	private static Random random = new Random((new Date()).getTime());
-	
-	public static String generateRandomString(int length) {
-	      char[] values = {'a','b','c','d','e','f','g','h','i','j',
-	               'k','l','m','n','o','p','q','r','s','t',
-	               'u','v','w','x','y','z','0','1','2','3',
-	               '4','5','6','7','8','9'};
+	public static String generateRandomString(int length, int seed) {
+      char[] values = {'a','b','c','d','e','f','g','h','i','j',
+               'k','l','m','n','o','p','q','r','s','t',
+               'u','v','w','x','y','z','0','1','2','3',
+               '4','5','6','7','8','9'};
 
-	      String out = "";
+      String out = "";
+      Random random = new Random(seed);
 
-	      for (int i=0;i<length;i++) {
-	          int idx=random.nextInt(values.length);
-	          out += values[idx];
-	      }
-	      return out;
-	    }
+      for (int i=0;i<length;i++) {
+          int idx=random.nextInt(values.length);
+          out += values[idx];
+      }
+      return out;
+    }
 
 	  public static String getPublicKeyString(){
 	  	// FileWriter writer = null;
