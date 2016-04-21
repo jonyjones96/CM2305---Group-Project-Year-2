@@ -1,3 +1,5 @@
+package groupProject;
+
 import java.sql.*;
 import java.sql.Statement;
 
