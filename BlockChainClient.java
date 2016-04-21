@@ -37,6 +37,11 @@ public class BlockChainClient extends Thread {
             BlockChainClient client = new BlockChainClient(messageContent);
           }
           break;
+          case "DATABASE":
+          {
+            System.out.println(messageContent);
+            // receive database
+          }
         }
       }
     }

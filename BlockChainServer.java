@@ -25,6 +25,8 @@ public class BlockChainServer extends Thread {
       System.out.print(client.getIpAddress());
     }
     System.out.println();
+
+    BlockChainServer.sendDatabase(this.connection);
   }
 
   public static void startListening() throws IOException {
@@ -53,6 +55,11 @@ public class BlockChainServer extends Thread {
     catch(IOException e) {
       System.out.println("Could not send to " + client.getIpAddress());
     }
+  }
+
+  public static void sendDatabase(BlockChainConnection client) {
+    String databaseString = createTable.concatFields();
+    BlockChainServer.sendToClient(client, "DATABASE", databaseString);
   }
 
   public static void sendToAll(String type, String message) {

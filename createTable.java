@@ -65,7 +65,8 @@ public class createTable {
 			 }
 	}
 	
-	public void concatFields() {  // CONCATENATES FIELDS INTO A STRING
+	public static String concatFields() {  // CONCATENATES FIELDS INTO A STRING
+		String concatString = "";
 		 try {
 			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 			 } catch (ClassNotFoundException err){
@@ -84,7 +85,6 @@ public class createTable {
 			ResultSet rs = stmt.executeQuery(sql);
 			//String sql = "SELECT CONCAT(sellerID,',',buyerID,',',transactionAmount,',',levelDifficulty,',',previousHash,',',a_key,',',a_value,',',publicKey) FROM someBlockChain";
 			
-			String concatString = "";
 			
 			while (rs.next()){
 				concatString += rs.getString("sellerID"); concatString +=  ",";
@@ -98,7 +98,6 @@ public class createTable {
 				
 			}
 			
-			System.out.println("The string is... " + concatString);
 				
 			 	}
 			 }
@@ -107,7 +106,7 @@ public class createTable {
 			 	System.out.println(e.getMessage());
 			 }
 			 
-			 
+			 return concatString;
 		}
 	
 	public void printTable() {			// PRINTS the someBlockChain table
