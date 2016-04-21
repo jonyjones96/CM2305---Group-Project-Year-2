@@ -45,11 +45,11 @@ class BlockChain{
   	    		String some_key = head.getKey();
   	    		String some_value = head.getValue();
 			String some_message = head.getMessage();
-			String some_seed = head.getTheSeed();
+			int some_seed = head.getTheSeed();
 			
 			System.out.println("Record insertion successful!");
 			
-  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, some_messae, some_seed); // store to database
+  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, some_message, some_seed); // store to database
 			} else {
     			 
     			 System.out.println("This key is invalid. Record already exists.");
@@ -119,7 +119,7 @@ class BlockChain{
 		 	pstmt.setString(6, a_key);
 		 	pstmt.setString(7, a_value);
 		 	pstmt.setString(8, a_message);
-		 	pstmt.setString(9, enc_seed);
+		 	pstmt.setInt(9, enc_seed);
 		 	pstmt.executeUpdate();
 		 	}
 		 }
