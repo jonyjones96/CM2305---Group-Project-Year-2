@@ -16,8 +16,9 @@ class Block{
 	private String key;
 	private String value;
 	private String message;
+	private int theSeed;
 
-	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,String key,String value, String message, Block pointer){
+	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,String key,String value, String message, int theSeed, Block pointer){
 		this.sellerID = sellerID;
 		this.buyerID = buyerID;
 		this.transactionAmount = transactionAmount;
@@ -27,6 +28,7 @@ class Block{
 		this.key = key;
 		this.value = value;
 		this.message = message;
+		this.theSeed = theSeed;
 		// test to make sure the output are the same
 		// System.out.println("sellerID = "+sellerID+"buyerID = "+buyerID+" transactionAmount = " +transactionAmount+" levelDifficulty = "+levelDifficulty +" previousHash = "+previousHash );
 	}
@@ -63,6 +65,10 @@ class Block{
 	}
 	public String getMessage(){
 		return message;
+	}
+	
+	public int getTheSeed() {
+		return theSeed;
 	}
 	// add the string to the previous hash to create the current hash and then compare
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
