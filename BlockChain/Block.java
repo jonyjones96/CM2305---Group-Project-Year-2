@@ -17,9 +17,10 @@ class Block{
 	private Block pointer;
 	private String key;
 	private String value;
-	private String publicKey;
+	//private String publicKey;
+	private String message;
 
-	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,String key,String value, String publicKey, Block pointer){
+	public Block(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String previousHash,String key,String value, String message, Block pointer){
 		this.sellerID = sellerID;
 		this.buyerID = buyerID;
 		this.transactionAmount = transactionAmount;
@@ -28,7 +29,7 @@ class Block{
 		this.pointer = pointer;
 		this.key = key;
 		this.value = value;
-		this.publicKey = publicKey;
+		this.message = message;
 		// test to make sure the output are the same
 		// System.out.println("sellerID = "+sellerID+"buyerID = "+buyerID+" transactionAmount = " +transactionAmount+" levelDifficulty = "+levelDifficulty +" previousHash = "+previousHash );
 	}
@@ -63,8 +64,8 @@ class Block{
 	public String getPreviousHash(){
 		return previousHash;
 	}
-	public String getPublicKey(){
-		return publicKey;
+	public String getMessage(){
+		return message;
 	}
 	// add the string to the previous hash to create the current hash and then compare
 	// also see CM2305---Group-Project-Year-2/tutorials/testMD5.java
