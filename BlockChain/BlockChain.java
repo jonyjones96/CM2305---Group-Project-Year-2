@@ -19,16 +19,6 @@ class BlockChain{
   	}
   	
   	public boolean check_toinsert (String key, String value) throws Exception { // checks for existing records in the block chain
-		/* Not on full working mode. 
-			* So far, it throws an error if key_toinsert (with same value) comes subsequently 
-			* example: 	insert("bbc.co.uk");
-						insert("bbc.co.uk");    --- SUCCESS: Record wont be inserted ---
-						
-					However, 
-						insert("bbc.co.uk");
-						insert("github.com");
-						insert("bbc.co.uk");	--- FAIL: Record insertion will be successful --- 
-		*/
 		boolean aMatch = false;
 		while ( head != null ) {
 			if (key.equals(head.getKey())) {    // if there is a match return true ( hence true for an invalidinsert -- see insert() )
@@ -42,11 +32,11 @@ class BlockChain{
 		return aMatch;		
 	}
 
-    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value,String publicKey)throws Exception {
+    public void insert(int sellerID,int buyerID,int transactionAmount,int levelDifficulty,String key,String value,String message)throws Exception {
     	 try{
     	 	boolean invalidInsert = check_toinsert(key, value);  // start validation 
     		if (invalidInsert == false){   // if there's no match, insert desire record.
-    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,publicKey,head);
+    		 head = new Block(sellerID,buyerID,transactionAmount,levelDifficulty,hashCurrentBlock,key,value,message,head);
     		 // test to check if the hashes are the same each time you run BlockChainTest.java
     		  hashCurrentBlock = head.getCurrentHash();
     		   	int a_sellID = head.getSellerID();
@@ -55,10 +45,10 @@ class BlockChain{
   	    		int a_level = head.getLevel();
   	    		String some_key = head.getKey();
   	    		String some_value = head.getValue();
-				String some_publicKey = head.getPublicKey();
+			String some_message = head.getMessage();
 				System.out.println("Record insertion successful!");
 				// Need to add the publicKey
-  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, some_publicKey); // store to database
+  	    		copytoDB(a_sellID, a_buyID, a_transaction, a_level, hashCurrentBlock, some_key, some_value, some_message); // store to database
 			} else {
     			 
     			 System.out.println("This key is invalid. Record already exists.");
@@ -104,7 +94,7 @@ class BlockChain{
   }
 
 /* MYSQL CONNECTION */
-  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value, String publicKey) throws Exception {
+  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value, String a_message) throws Exception {
 		 try {
 		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 		 } catch (ClassNotFoundException err){
@@ -127,7 +117,7 @@ class BlockChain{
 		 	pstmt.setString(5, previous_hash);
 		 	pstmt.setString(6, a_key);
 		 	pstmt.setString(7, a_value);
-		 	pstmt.setString(8, publicKey);
+		 	pstmt.setString(8, a_message);
 		 	pstmt.executeUpdate();
 		 	}
 		 }
