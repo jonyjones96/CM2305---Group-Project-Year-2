@@ -30,21 +30,16 @@ public class BlockChainServer extends Thread {
   }
 
   public static void startListening() throws IOException {
-    new Thread()
-    {
-    public void run() {
-        try {
-          ServerSocket serverSocket = new ServerSocket(4567);
-          System.out.println("Listening on port " + 4567);
-          
-          while(true) {
-            new BlockChainServer(serverSocket.accept());
-          }
-        }
-        catch(IOException e)
-        {}
+    try {
+      ServerSocket serverSocket = new ServerSocket(4567);
+      System.out.println("Listening on port " + 4567);
+      
+      while(true) {
+        new BlockChainServer(serverSocket.accept());
+      }
     }
-    }.start();
+    catch(IOException e)
+    {}
   }
 
   public static void sendToClient(BlockChainConnection client, String type, String message) {
