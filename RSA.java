@@ -63,7 +63,7 @@ public class RSA{
 		byte[] decryptedMessage = null;
 		RSAEncryptionDecryption rsaObj = new RSAEncryptionDecryption();
 		rsaObj.setPrivateKey(privateKey);
-		decryptedMessage = rsaObj.decryptData(en,privateKey);
+		decryptedMessage = rsaObj.decryptData(en);
 		return decryptedMessage;
 	}
 }
