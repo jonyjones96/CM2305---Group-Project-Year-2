@@ -61,6 +61,8 @@
 // }
 import java.util.Date;
 import java.util.Random;
+import java.util.*;
+import javax.xml.bind.DatatypeConverter;
 
 public class RSATest{
 	private static Random random = new Random((new Date()).getTime());
@@ -75,6 +77,13 @@ public class RSATest{
 			System.out.println("Message: " + first);
 			byte[] encypted =test1.encryptMessage(pu,first);
 			byte[] newMessage = null;
+			System.out.println(new String(encypted));
+
+			String oldMessage = DatatypeConverter.printBase64Binary(encypted);
+			byte[] decoded = DatatypeConverter.parseBase64Binary(oldMessage);
+
+			System.out.println("OLd message: " +oldMessage);
+			System.out.println("new message: " + new String(decoded, "UTF-8"));
 			newMessage = test1.decryptMessage(pr,encypted);
 			System.out.println("Decrypted Data: " + new String(newMessage));
 		}
