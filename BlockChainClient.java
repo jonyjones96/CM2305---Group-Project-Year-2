@@ -28,20 +28,25 @@ public class BlockChainClient extends Thread {
 
       String inLine;
       while((inLine = in.readLine()) != null) {
-        String messageType = inLine.split(":")[0];
-        String messageContent = inLine.split(":")[1];
+        try {
+          System.out.println(inLine);
+          String messageType = inLine.split(":")[0];
+          String messageContent = inLine.split(":")[1];
 
-        switch(messageType) {
-          case "CLIENT":
-          if(!BlockChainClient.isConnected(messageContent)) {
-            BlockChainClient client = new BlockChainClient(messageContent);
+          switch(messageType) {
+            case "CLIENT":
+            if(!BlockChainClient.isConnected(messageContent)) {
+              BlockChainClient client = new BlockChainClient(messageContent);
+            }
+            break;
+            case "BLOCK":
+            {
+              // receive block
+            }
           }
-          break;
-          case "DATABASE":
-          {
-            System.out.println(messageContent);
-            // receive database
-          }
+        }
+        catch(Exception e) {
+          System.out.println("Error: " + inLine);
         }
       }
     }

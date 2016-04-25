@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.sql.*;
 
 public class BlockChainServer extends Thread {
   protected BlockChainConnection connection;
@@ -22,9 +23,7 @@ public class BlockChainServer extends Thread {
 
     for(BlockChainConnection client : clients) {
       BlockChainServer.sendToClient(this.connection, "CLIENT", client.getIpAddress());
-      System.out.print(client.getIpAddress());
     }
-    System.out.println();
 
     BlockChainServer.sendDatabase(this.connection);
   }
@@ -53,8 +52,44 @@ public class BlockChainServer extends Thread {
   }
 
   public static void sendDatabase(BlockChainConnection client) {
-    String databaseString = createTable.concatFields();
-    BlockChainServer.sendToClient(client, "DATABASE", databaseString);
+     try {
+        Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+       } catch (ClassNotFoundException err){
+        System.out.println(err);
+       }
+       
+       Connection conn = null;
+       
+       try {
+       conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+       if (conn != null){       // successful connection
+        //System.out.println("Connected");
+
+          Statement stmt = conn.createStatement();
+          String sql = "SELECT * FROM someBlockChain";
+          ResultSet rs = stmt.executeQuery(sql);
+           
+          while (rs.next()){
+            String concatString = "";
+            concatString += rs.getString("sellerID"); concatString +=  ",";
+            concatString += rs.getString("buyerID" ); concatString +=  ",";
+            concatString += rs.getString("transactionAmount" ); concatString +=  ",";
+            concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
+            concatString += rs.getString("previousHash" ); concatString +=  ",";
+            concatString += rs.getString("a_key" ); concatString +=  ",";
+            concatString += rs.getString("a_value" ); concatString +=  ",";
+            concatString += rs.getString("a_message" ); concatString +=  ",";
+            concatString += rs.getString("enc_seed" );
+            
+
+            BlockChainServer.sendToClient(client, "BLOCK", concatString);  
+          }
+      }
+    }
+       catch (SQLException e){    // if failed connection
+        System.out.println("Got an exception");
+        System.out.println(e.getMessage());
+       }
   }
 
   public static void sendToAll(String type, String message) {
