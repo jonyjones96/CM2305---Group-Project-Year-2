@@ -72,7 +72,7 @@ public class Start{
 				System.out.println("Insert the name for the private key file: ");
 				privateKeyName = user_input.next( );
 				System.out.println("Your private key file name is: " +privateKeyName );
-				publicKeyName = "publicKey.key";
+				publicKeyName = "public.key";
 				int buyerID = 101;
 				int sellerID = 122;
 				int transactionAmount = key.length();

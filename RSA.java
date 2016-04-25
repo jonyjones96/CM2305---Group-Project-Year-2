@@ -47,12 +47,14 @@ public class RSA{
 	public byte[] encryptMessage(String publicKey,String message)throws IOException{
 		 byte[] siphertext =null;
 		try{
+			System.out.println(message);
 			RSAEncryptionDecryption rsaObj = new RSAEncryptionDecryption();
 			rsaObj.setPublicKey(publicKey);
 			byte[] encryptedData = rsaObj.encryptData(message);
+			System.out.println(encryptedData);
 			return encryptedData;
 		 }catch(Exception e){}
-		 
+		 //System.out.println(siphertext);
 		 return siphertext;
 	}
 
