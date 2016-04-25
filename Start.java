@@ -3,6 +3,7 @@ import java.sql.*;
 import java.util.Date;
 import java.util.Random;
 import java.io.*;
+import javax.xml.bind.DatatypeConverter;
 // import java.RSA.*;
 public class Start{
 
@@ -84,7 +85,8 @@ public class Start{
 				int randomNum = rand.nextInt(100);
 				String message = generateRandomString(10,randomNum);
 				byte[] encryptedMessage = keyCreater.encryptMessage(publicKeyName,message);
-				String encryptedMDB = new String(encryptedMessage);
+				String encryptedMDB = DatatypeConverter.printBase64Binary(encryptedMessage);
+				// String encryptedMDB = new String(encryptedMessage);
 				// need to add the randomNum and the encryptedMessageToAddToDatabase to add to the database
 				
 			 	
