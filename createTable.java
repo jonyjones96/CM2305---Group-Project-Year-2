@@ -100,7 +100,8 @@ public class createTable {
 				concatString += rs.getString("previousHash" ); concatString +=  ",";
 				concatString += rs.getString("a_key" ); concatString +=  ",";
 				concatString += rs.getString("a_value" ); concatString +=  ",";
-				concatString += rs.getString("publicKey" ); concatString += "####";
+				concatString += rs.getString("a_message" ); concatString +=  ",";
+				concatString += rs.getString("enc_seed" ); concatString += "####";
 				
 			}
 			
