@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.sql.Statement;
+import java.util.Scanner;
 
 public class createTable {
 	public void duplicateBchain() {  // CREATES COPY OF someBlockChain table to BlockChain table.
@@ -14,12 +14,18 @@ public class createTable {
 		 try {
 		 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
 		 	if (conn!= null){       // successful connection
+		 		
+		 	}
 		 	
 			Statement stmt = conn.createStatement();
-			String sql = "INSERT INTO BlockChain SELECT * FROM someBlockChain"; 
-			stmt.executeUpdate(sql);
+			String sql = "INSERT INTO BlockChain (SELECT * FROM someBlockChain WHERE someBlockChain.a_key NOT IN (SELECT BlockChain.a_key FROM BlockChain));";
+			int count = stmt.executeUpdate(sql);
 			
-		 	}
+			if (count > 0){
+				System.out.println(count + " record(s) successfully updated to BlockChain.");
+			} else {
+				System.out.println("BlockChain is up to date.");
+			}
 		 }
 		 catch (SQLException e){    // if failed connection
 		 	System.out.println("Got an exception");
@@ -129,7 +135,7 @@ public class createTable {
 			}
 			
 			st = con.createStatement();
-			rs = st.executeQuery("SELECT * FROM someBlockChain"); 
+			rs = st.executeQuery("SELECT * FROM someBlockChain");
 			
 
 			while (rs.next()){
@@ -162,5 +168,101 @@ public class createTable {
 			}
 		}
 	}
+	
+	public String getEncryptedMessage(String key){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		String message = " ";
+		try{
+			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			String SQL = "SELECT a_message FROM someBlockChain WHERE `a_key` = '" + key + "'";
+			ResultSet rs;
+			rs = stat.executeQuery(SQL);
+			while (rs.next()){
+				message = rs.getString("a_message");
+			}		
+			if ( message == " "){
+				System.out.println("System unable to get your request, make sure the key exists" );
+			}
+			con.close();
+			return message;
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return message;
+	}
+	
+	public int getSeed(String key){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		int seed = -1;
+		try{
+			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			String SQL = "SELECT enc_seed FROM someBlockChain WHERE `a_key` = '" + key + "'";
+			ResultSet rs;
+			rs = stat.executeQuery(SQL);
+			while (rs.next()){
+				seed = rs.getInt("enc_seed");
+			}		
+			if ( seed == -1){
+				System.out.println("System unable to get your request, make sure the key exists" );
+			}
+			con.close();
+			return seed;
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return seed;
+	}
+	
+	public void updateDomain(String key){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		try{
+			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			System.out.println("Enter the value: ");
+			Scanner user_input = new Scanner( System.in );
+			String value = user_input.next( );
+			String SQL = "Update someBlockChain SET `a_value` = '" + value + "' WHERE `a_key` = '" + key + "'";
+			stat.executeUpdate(SQL);
+			con.close();
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
 			
 }
