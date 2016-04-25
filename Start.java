@@ -86,6 +86,7 @@ public class Start{
 				String message = generateRandomString(10,randomNum);
 				byte[] encryptedMessage = keyCreater.encryptMessage(publicKeyName,message);
 				String encryptedMDB = DatatypeConverter.printBase64Binary(encryptedMessage);
+				System.out.println("THe encrypted string : " + encryptedMDB);
 				// String encryptedMDB = new String(encryptedMessage);
 				// need to add the randomNum and the encryptedMessageToAddToDatabase to add to the database
 				
