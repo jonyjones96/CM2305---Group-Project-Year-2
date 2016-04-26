@@ -71,7 +71,7 @@ public class createTable {
 			 	//System.out.println("Creating table...");
 				Statement stmt = conn.createStatement();
 				
-			String sql = " CREATE TABLE someBlockChain " +
+			String sql = " CREATE TABLE IF NOT EXISTS someBlockChain " +
 							"(sellerID INTEGER, " +
 							"  buyerID INTEGER, " +
 							"transactionAmt INTEGER, " +
