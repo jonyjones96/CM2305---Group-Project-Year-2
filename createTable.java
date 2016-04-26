@@ -1,8 +1,12 @@
+package groupProject;
+
 import java.sql.*;
 import java.util.Scanner;
 
 public class createTable {
-	public void duplicateBchain() {  // CREATES COPY OF someBlockChain table to BlockChain table.
+	
+	public void duplicateBchain(String connectionString, boolean newCon) {  // CREATES COPY OF someBlockChain table to BlockChain table.
+		String[] DB = connectionString.split(",");
 		try {
 		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 		 } catch (ClassNotFoundException err){
@@ -12,13 +16,29 @@ public class createTable {
 		 Connection conn = null;
 		 
 		 try {
-		 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+		 	conn = DriverManager.getConnection(DB[0],DB[1],DB[2]); // connection configuration to the mysql database
 		 	if (conn!= null){       // successful connection
-		 		
-		 	}
 		 	
 			Statement stmt = conn.createStatement();
-			String sql = "INSERT INTO BlockChain (SELECT * FROM someBlockChain WHERE someBlockChain.a_key NOT IN (SELECT BlockChain.a_key FROM BlockChain));";
+			String sql;
+			if (newCon == true){
+				sql = " CREATE TABLE dns " +
+						"(sellerID INTEGER, " +
+						"  buyerID INTEGER, " +
+						"transactionAmt INTEGER, " +
+						"levelDifficulty INTEGER, " +
+						"previousHash VARCHAR(40), " +
+						"a_key VARCHAR(50), " +
+						"a_value VARCHAR(18), " +
+						"a_message VARCHAR(1000), " +
+						"enc_seed INTEGER)";
+						
+				stmt.executeUpdate(sql);
+				sql = "INSERT INTO dns SELECT * FROM someBlockChain;";
+			}
+			else{
+				sql = "INSERT INTO dns (SELECT * FROM someBlockChain WHERE someBlockChain.a_key NOT IN (SELECT dns.a_key FROM dns));";
+			}
 			int count = stmt.executeUpdate(sql);
 			
 			if (count > 0){
@@ -26,14 +46,17 @@ public class createTable {
 			} else {
 				System.out.println("BlockChain is up to date.");
 			}
-		 }
+		 }}
 		 catch (SQLException e){    // if failed connection
-		 	System.out.println("Got an exception");
-		 	System.out.println(e.getMessage());
+		 	//System.out.println("Got an exception");
+		 	//System.out.println(e.getMessage());
 		 } 
 }
 
-	public void newTable() {  // CREATES NEW TABLE CALLED BLOCKCHAIN
+	public void newTable(String connectionString, String blockChainString) {  // CREATES NEW TABLE CALLED BLOCKCHAIN
+		String[] DB = connectionString.split(",");
+		String[] bc = blockChainString.split(",");
+		
 		 try {
 			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 			 } catch (ClassNotFoundException err){
@@ -43,7 +66,7 @@ public class createTable {
 			 Connection conn = null;
 			 
 			 try {
-			 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+			 	conn = DriverManager.getConnection(DB[0],DB[1],DB[2]); // connection configuration to the mysql database
 			 	if (conn!= null){       // successful connection
 			 	//System.out.println("Connected");
 			 	
@@ -58,16 +81,27 @@ public class createTable {
 							"previousHash VARCHAR(40), " +
 							"a_key VARCHAR(50), " +
 							"a_value VARCHAR(18), " +
-							"publicKey VARCHAR(1000)) ";
+							"a_message VARCHAR(1000), " +
+							"enc_seed INTEGER)";
 							
 				
 				stmt.executeUpdate(sql);
-				//System.out.println("Created.");
+				
+				sql = "INSERT INTO someBlockChain VALUES ('" + Integer.parseInt(bc[0]) +"','"+ 
+															  Integer.parseInt(bc[1]) +"','"+ 
+															  Integer.parseInt(bc[2]) +"','"+ 
+															  Integer.parseInt(bc[3]) +"','"+ 
+															  bc[4] +"','"+ 
+															  bc[5] +"','"+ 
+															  bc[6] +"','"+
+															  bc[7] +"','"+
+															  Integer.parseInt(bc[8]) +"')";
+				stmt.executeUpdate(sql);
 			 	}
 			 }
-			 catch (SQLException e){    // if failed connection
-			 	System.out.println("Got an exception");
-			 	System.out.println(e.getMessage());
+			 catch (SQLException e){
+			 	//System.out.println("Got an exception");
+			 	//System.out.println(e.getMessage());
 			 }
 	}
 	
@@ -100,8 +134,7 @@ public class createTable {
 				concatString += rs.getString("previousHash" ); concatString +=  ",";
 				concatString += rs.getString("a_key" ); concatString +=  ",";
 				concatString += rs.getString("a_value" ); concatString +=  ",";
-				concatString += rs.getString("a_message" ); concatString +=  ",";
-				concatString += rs.getString("enc_seed" ); concatString += "####";
+				concatString += rs.getString("publicKey" ); concatString += "####";
 				
 			}
 			
@@ -170,7 +203,8 @@ public class createTable {
 		}
 	}
 	
-	public String getEncryptedMessage(String key){
+	public String getEncryptedMessage(String key,String connectionString){
+		String[] DB = connectionString.split(",");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		}
@@ -181,7 +215,8 @@ public class createTable {
 		Connection con = null;
 		String message = " ";
 		try{
-			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
 			if (con != null) {
 				//System.out.println("Connected");
 			}
@@ -204,7 +239,8 @@ public class createTable {
 		return message;
 	}
 	
-	public int getSeed(String key){
+	public int getSeed(String key,String connectionString){
+		String[] DB = connectionString.split(",");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		}
@@ -215,7 +251,8 @@ public class createTable {
 		Connection con = null;
 		int seed = -1;
 		try{
-			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
 			if (con != null) {
 				//System.out.println("Connected");
 			}
@@ -238,7 +275,8 @@ public class createTable {
 		return seed;
 	}
 	
-	public void updateDomain(String key){
+	public void updateDomain(String key,String connectionString){
+		String[] DB = connectionString.split(",");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		}
@@ -248,7 +286,8 @@ public class createTable {
 	
 		Connection con = null;
 		try{
-			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
 			if (con != null) {
 				//System.out.println("Connected");
 			}
@@ -264,6 +303,44 @@ public class createTable {
 			System.out.println(e.getMessage());
 		}
 	}
-	
-			
+
+	public String newCon() {
+	   // JDBC driver name and database URL
+	   String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	   String DB_URL = "jdbc:mysql://localhost:3306/";
+
+	   //  Database credentials
+	   Scanner user_input = new Scanner( System.in );
+	   System.out.println("Input localhost Username");
+	   String USER = user_input.next( );
+	   System.out.println("Input localhost password");
+	   String PASS = user_input.next( );
+	   
+	  Connection conn = null;
+	  Statement stmt = null;
+	   try{
+	      //STEP 2: Register JDBC driver
+	      Class.forName("com.mysql.jdbc.Driver");
+
+	      //STEP 3: Open a connection
+	      //System.out.println("Connecting to database...");
+	      conn = DriverManager.getConnection(DB_URL+"?useSSL=false", USER, PASS);
+
+	      //STEP 4: Execute a query
+	      //System.out.println("Creating database...");
+	      stmt = conn.createStatement();
+	      
+	      String sql = "CREATE DATABASE gprojectdns";
+	      stmt.executeUpdate(sql);
+	      //System.out.println("Database created successfully...");
+	   }catch(SQLException se){
+	      //Handle errors for JDBC
+	      //se.printStackTrace();
+	   }catch(Exception e){
+	      //Handle errors for Class.forName
+	      //e.printStackTrace();
+	   }
+	   String conString = "jdbc:mysql://localhost:3306/gprojectDns?useSSL=false,"+USER+","+PASS;
+	   return conString;
+	}
 }
