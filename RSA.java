@@ -59,11 +59,11 @@ public class RSA{
 	}
 
 	public byte[] decryptMessage(String privateKey, String encryptedMessage)throws IOException{
-		byte[] en = encryptedMessage.getBytes();
+		//byte[] en = encryptedMessage.getBytes();
 		byte[] decryptedMessage = null;
 		RSAEncryptionDecryption rsaObj = new RSAEncryptionDecryption();
 		rsaObj.setPrivateKey(privateKey);
-		decryptedMessage = rsaObj.decryptData(en);
+		decryptedMessage = rsaObj.decryptData(encryptedMessage);
 		return decryptedMessage;
 	}
 }
