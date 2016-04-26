@@ -193,21 +193,13 @@ public class Start{
 		}
 		else if(option.toLowerCase().equals("d" )){
 			System.out.println("You have quit the program");
+			System.exit(0);
 		}
 		else{
 			System.out.println("You input did not make sense, try again!");
 			mainMenu();
 		}
 		
-		System.out.println("Continue? [Y/N]");
-		String next = user_input.next( );
-		if(next.toLowerCase().equals("y") ){
-			mainMenu();
-		}
-		else{
-			System.out.println("You have quit the program");
-			System.exit(0);
-		}
 	System.out.println("----------------------");
 	System.out.println();
 	mainMenu();
