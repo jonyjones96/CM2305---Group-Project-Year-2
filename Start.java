@@ -1,5 +1,3 @@
-package groupProject;
-
 import java.util.Scanner;
 import java.sql.*;
 import java.util.Date;
@@ -11,34 +9,29 @@ public class Start{
 
 	public static void main(String args[]){
 		boolean New = true;
-		String connectionString = null;
 		createTable table = new createTable();
+		String connectionString = null;
 		if(New == true){
+			//System.out.println(connectionString);
 			try {
-				BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
-				connectionString = in.readLine();
-				//System.out.println(connectionString);
-			}
-			catch(IOException ex){
-				//System.out.println(ex);
-			}	
+ 				BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+ 				connectionString = in.readLine();
+ 				//System.out.println(connectionString);
+ 			}
+ 			catch(IOException ex){
+ 				//System.out.println(ex);
+ 			}	
 			try {
 				File file = new File("localhost.txt");
 
 				if (!file.exists()) {
 					connectionString = table.newCon();
-					System.out.println(connectionString);
 					file.createNewFile();
-				
+
 					FileWriter fw = new FileWriter(file.getAbsoluteFile());
 					BufferedWriter bw = new BufferedWriter(fw);
 					bw.write(connectionString);
 					bw.close();
-					
-				}
-				else{
-					
-					//System.out.println(connectionString);
 				}
 
 			} catch (IOException e) {
@@ -48,12 +41,26 @@ public class Start{
 			String blockChainString = "123,123,10,6,abc,will.com,123,123,123,38"; //blockChainString from connection"
 			table.newTable(connectionString,blockChainString);
 			table.duplicateBchain(connectionString,true);
-			
-			mainMenu();
 		}
-		else{
-			mainMenu();
-		}
+
+		new Thread()
+ 		    {
+ 	    	public void run() {
+		    	try {
+ 	    		BlockChainServer.startListening();    	
+ 		    	}
+ 		    	catch(IOException e) {}
+ 		    }
+ 		}.start();
+ 		
+ 		new Thread()
+ 		    {
+ 		    public void run() {
+ 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
+ 		    }
+ 		}.start();
+
+		mainMenu();
 	}
 	public static void mainMenu(){	
 		System.out.println("Welcome to the Decentralised DNS");
@@ -157,6 +164,7 @@ public class Start{
 				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
 			 	
 			 	table.duplicateBchain(connectionString,false);
+			 	BlockChainServer.sendUpdate(key);
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
@@ -187,6 +195,7 @@ public class Start{
 					System.out.println("Your domain has been changed");
 										
 					// update everyones database
+					BlockChainServer.sendUpdate(key);
 				
 				}
 			}
@@ -194,20 +203,16 @@ public class Start{
 		}
 		else if(option.toLowerCase().equals("d" )){
 			System.out.println("You have quit the program");
+			System.exit(0);
 		}
 		else{
 			System.out.println("You input did not make sense, try again!");
 			mainMenu();
 		}
 		
-		System.out.println("Continue? [Y/N]");
-		String next = user_input.next( );
-		if(next.toLowerCase().equals("y") ){
-			mainMenu();
-		}
-		else{
-			System.out.println("You have quit the program");
-		}
+	System.out.println("----------------------");
+	System.out.println();
+	mainMenu();
 	}
 	
 	public static String generateRandomString(int length, int seed) {

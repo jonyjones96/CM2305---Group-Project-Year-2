@@ -1,5 +1,3 @@
-package groupProject;
-
 import java.sql.*;
 import java.util.Scanner;
 
@@ -73,7 +71,7 @@ public class createTable {
 			 	//System.out.println("Creating table...");
 				Statement stmt = conn.createStatement();
 				
-			String sql = " CREATE TABLE someBlockChain " +
+			String sql = " CREATE TABLE IF NOT EXISTS someBlockChain " +
 							"(sellerID INTEGER, " +
 							"  buyerID INTEGER, " +
 							"transactionAmt INTEGER, " +
@@ -349,7 +347,7 @@ public class createTable {
 	      //System.out.println("Creating database...");
 	      stmt = conn.createStatement();
 	      
-	      String sql = "CREATE DATABASE gprojectdns";
+	      String sql = "CREATE DATABASE gprojectDns";
 	      stmt.executeUpdate(sql);
 	      //System.out.println("Database created successfully...");
 	   }catch(SQLException se){
