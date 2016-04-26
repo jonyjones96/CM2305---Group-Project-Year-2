@@ -1,3 +1,8 @@
+package groupProject;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;		
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -95,8 +100,21 @@ class BlockChain{
   }
 
 /* MYSQL CONNECTION */
-  public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value, String a_message, int enc_seed) throws Exception {
-		 try {
+  	public void copytoDB(int sell_ID, int buy_ID, int trans_amount, int level_difficulty, String previous_hash, String a_key, String a_value, String a_message, int enc_seed) throws Exception {
+  		String connectionString = null;
+		String[] DB = null;
+		//need some code here to get the connectionString
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+			connectionString = in.readLine();
+			DB = connectionString.split(",");
+			//System.out.println(connectionString);
+		}
+		catch(IOException ex){
+			System.out.println(ex);
+		}
+	  	
+	  	try {
 		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
 		 } catch (ClassNotFoundException err){
 		 	System.out.println(err);
@@ -104,8 +122,9 @@ class BlockChain{
 		 
 		 Connection conn = null;
 		 try {
-		 	conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
-		 	if (conn!= null){       // successful connection
+		 	//conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+			 conn = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+			 if (conn!= null){       // successful connection
 		 	//System.out.println("Connected");
 		 	//System.out.println("Inserting records...");
 			
