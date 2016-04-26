@@ -51,20 +51,32 @@ public class BlockChainServer extends Thread {
   }
 
   public static void sendDatabase(BlockChainConnection client) {
-     try {
-        Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
-       } catch (ClassNotFoundException err){
-        System.out.println(err);
-       }
-       
-       Connection conn = null;
-       
-       try {
-       conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
-       if (conn != null){       // successful connection
+    String connectionString = null;
+    try {
+      BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+      connectionString = in.readLine();
+    }
+    catch(IOException e){
+        System.out.println(e);
+    } 
+
+    String[] DB = connectionString.split(",");
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+    }
+    catch (ClassNotFoundException err) {
+      System.out.println(err);
+    }
+  
+    Connection con = null;
+    int seed = -1;
+    try{
+      //con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+      con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+      if (con != null) {
         //System.out.println("Connected");
 
-          Statement stmt = conn.createStatement();
+          Statement stmt = con.createStatement();
           String sql = "SELECT * FROM someBlockChain";
           ResultSet rs = stmt.executeQuery(sql);
            
@@ -92,20 +104,31 @@ public class BlockChainServer extends Thread {
   }
 
   public static void sendUpdate(String key) {
+    String connectionString = null;
     try {
-        Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
-       } catch (ClassNotFoundException err){
-        System.out.println(err);
-       }
-       
-       Connection conn = null;
-       
-       try {
-       conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
-       if (conn != null){       // successful connection
+      BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+      connectionString = in.readLine();
+    }
+    catch(IOException e){
+        System.out.println(e);
+    }
+    String[] DB = connectionString.split(",");
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+    }
+    catch (ClassNotFoundException err) {
+      System.out.println(err);
+    }
+  
+    Connection con = null;
+    int seed = -1;
+    try{
+      //con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+      con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+      if (con != null) {
         //System.out.println("Connected");
 
-          Statement stmt = conn.createStatement();
+          Statement stmt = con.createStatement();
           String sql = "SELECT * FROM someBlockChain WHERE `a_key` = '" + key + "'";
           ResultSet rs = stmt.executeQuery(sql);
            

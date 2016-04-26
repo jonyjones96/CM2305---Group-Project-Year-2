@@ -27,6 +27,7 @@ public class BlockChainClient extends Thread {
       String inLine;
       while((inLine = in.readLine()) != null) {
         try {
+          System.out.println(inLine);
           String messageType = inLine.split(":")[0];
           String messageContent = inLine.split(":")[1];
 

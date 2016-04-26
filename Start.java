@@ -8,22 +8,6 @@ import javax.xml.bind.DatatypeConverter;
 public class Start{
 
 	public static void main(String args[]){
-		new Thread()
- 		    {
- 	    	public void run() {
-		    	try {
- 	    		BlockChainServer.startListening();    	
- 		    	}
- 		    	catch(IOException e) {}
- 		    }
- 		  }.start();
- 		new Thread()
- 		    {
- 		    public void run() {
- 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
- 		    }
- 		 }.start();
-
 		boolean New = true;
 		createTable table = new createTable();
 		String connectionString = null;
@@ -58,6 +42,24 @@ public class Start{
 			table.newTable(connectionString,blockChainString);
 			table.duplicateBchain(connectionString,true);
 		}
+
+		new Thread()
+ 		    {
+ 	    	public void run() {
+		    	try {
+ 	    		BlockChainServer.startListening();    	
+ 		    	}
+ 		    	catch(IOException e) {}
+ 		    }
+ 		}.start();
+ 		
+ 		new Thread()
+ 		    {
+ 		    public void run() {
+ 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
+ 		    }
+ 		}.start();
+
 		mainMenu();
 	}
 	public static void mainMenu(){	
