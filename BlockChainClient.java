@@ -39,7 +39,18 @@ public class BlockChainClient extends Thread {
             break;
             case "BLOCK":
             {
-              // receive block
+              String connectionString = null;
+              try {
+                BufferedReader connin = new BufferedReader(new FileReader("localhost.txt"));
+                connectionString = connin.readLine();
+              }
+              catch(IOException e){
+                  System.out.println(e);
+              } 
+
+              createTable table = new createTable();
+              table.newTable(connectionString, messageContent);
+              table.duplicateBchain(connectionString,false);
             }
           }
         }
