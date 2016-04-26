@@ -38,12 +38,13 @@ public class createTable {
 				sql = "INSERT INTO dns (SELECT * FROM someBlockChain WHERE someBlockChain.a_key NOT IN (SELECT dns.a_key FROM dns));";
 			}
 			int count = stmt.executeUpdate(sql);
+			conn.close();
 			
-			if (count > 0){
+			/*if (count > 0){
 				System.out.println(count + " record(s) successfully updated to BlockChain.");
 			} else {
 				System.out.println("BlockChain is up to date.");
-			}
+			}*/
 		 }}
 		 catch (SQLException e){    // if failed connection
 		 	//System.out.println("Got an exception");
