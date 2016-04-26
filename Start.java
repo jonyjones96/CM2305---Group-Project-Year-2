@@ -8,6 +8,22 @@ import javax.xml.bind.DatatypeConverter;
 public class Start{
 
 	public static void main(String args[]){
+		new Thread()
+ 		    {
+ 	    	public void run() {
+		    	try {
+ 	    		BlockChainServer.startListening();    	
+ 		    	}
+ 		    	catch(IOException e) {}
+ 		    }
+ 		  }.start();
+ 		new Thread()
+ 		    {
+ 		    public void run() {
+ 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
+ 		    }
+ 		 }.start();
+
 		boolean New = true;
 		if(New == true){
 			createTable table = new createTable();
@@ -33,12 +49,8 @@ public class Start{
 			String blockChainString = "123,123,10,6,abc,will.com,123,123,123,38"; //blockChainString from connection"
 			table.newTable(connectionString,blockChainString);
 			table.duplicateBchain(connectionString,true);
-			
-			mainMenu();
 		}
-		else{
-			mainMenu();
-		}
+		mainMenu();
 	}
 	public static void mainMenu(){	
 		System.out.println("Welcome to the Decentralised DNS");
@@ -142,6 +154,7 @@ public class Start{
 				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
 			 	
 			 	table.duplicateBchain(connectionString,false);
+			 	BlockChainServer.sendUpdate(key);
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
@@ -172,6 +185,7 @@ public class Start{
 					System.out.println("Your domain has been changed");
 										
 					// update everyones database
+					BlockChainServer.sendUpdate(key);
 				
 				}
 			}
@@ -193,6 +207,9 @@ public class Start{
 		else{
 			System.out.println("You have quit the program");
 		}
+	System.out.println("----------------------");
+	System.out.println();
+	mainMenu();
 	}
 	
 	public static String generateRandomString(int length, int seed) {
