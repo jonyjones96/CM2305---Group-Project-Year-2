@@ -1,262 +1,356 @@
-import java.util.Scanner;
+package groupProject;
+
 import java.sql.*;
-import java.util.Date;
-import java.util.Random;
-import java.io.*;
-import javax.xml.bind.DatatypeConverter;
-// import java.RSA.*;
-public class Start{
+import java.util.Scanner;
 
-	public static void main(String args[]){
-		boolean New = true;
-		createTable table = new createTable();
-		String connectionString = null;
-		if(New == true){
-			//System.out.println(connectionString);
-			try {
- 				BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
- 				connectionString = in.readLine();
- 				//System.out.println(connectionString);
- 			}
- 			catch(IOException ex){
- 				//System.out.println(ex);
- 			}	
-			try {
-				File file = new File("localhost.txt");
-
-				if (!file.exists()) {
-					connectionString = table.newCon();
-					file.createNewFile();
-
-					FileWriter fw = new FileWriter(file.getAbsoluteFile());
-					BufferedWriter bw = new BufferedWriter(fw);
-					bw.write(connectionString);
-					bw.close();
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			String blockChainString = "123,123,10,6,abc,will.com,123,123,123,38"; //blockChainString from connection"
-			table.newTable(connectionString,blockChainString);
-			table.duplicateBchain(connectionString,true);
-		}
-
-		new Thread()
- 		    {
- 	    	public void run() {
-		    	try {
- 	    		BlockChainServer.startListening();    	
- 		    	}
- 		    	catch(IOException e) {}
- 		    }
- 		}.start();
- 		
- 		new Thread()
- 		    {
- 		    public void run() {
- 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
- 		    }
- 		}.start();
-
-		mainMenu();
-	}
-	public static void mainMenu(){	
-		System.out.println("Welcome to the Decentralised DNS");
-		System.out.println("Please select an option (A,B,C): ");
-		System.out.println("A-Query a Domain ");
-		System.out.println("B-Register a Domain ");
-		System.out.println("C-Change the value of a Domain");
-		System.out.println("D-Quit");
-		
-		String connectionString = null;
-		String[] DB = null;
-		//need some code here to get the connectionString
+public class createTable {
+	
+	public void duplicateBchain(String connectionString, boolean newCon) {  // CREATES COPY OF someBlockChain table to BlockChain table.
+		String[] DB = connectionString.split(",");
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
-			connectionString = in.readLine();
-			DB = connectionString.split(",");
-			//System.out.println(connectionString);
-		}
-		catch(IOException ex){
-			System.out.println(ex);
-		}
-		
-		Scanner user_input = new Scanner( System.in );
-		String option;
-		option = user_input.next( );
+		 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+		 } catch (ClassNotFoundException err){
+		 	System.out.println(err);
+		 }
+		 
+		 Connection conn = null;
+		 
+		 try {
+		 	conn = DriverManager.getConnection(DB[0],DB[1],DB[2]); // connection configuration to the mysql database
+		 	if (conn!= null){       // successful connection
+		 	
+			Statement stmt = conn.createStatement();
+			String sql;
+			if (newCon == true){
+				sql = " CREATE TABLE dns " +
+						"(sellerID INTEGER, " +
+						"  buyerID INTEGER, " +
+						"transactionAmt INTEGER, " +
+						"levelDifficulty INTEGER, " +
+						"previousHash VARCHAR(40), " +
+						"a_key VARCHAR(50), " +
+						"a_value VARCHAR(18), " +
+						"a_message VARCHAR(1000), " +
+						"enc_seed INTEGER)";
+						
+				stmt.executeUpdate(sql);
+				sql = "INSERT INTO dns SELECT * FROM someBlockChain;";
+			}
+			else{
+				sql = "INSERT INTO dns (SELECT * FROM someBlockChain WHERE someBlockChain.a_key NOT IN (SELECT dns.a_key FROM dns));";
+			}
+			int count = stmt.executeUpdate(sql);
+			
+			if (count > 0){
+				System.out.println(count + " record(s) successfully updated to BlockChain.");
+			} else {
+				System.out.println("BlockChain is up to date.");
+			}
+		 }}
+		 catch (SQLException e){    // if failed connection
+		 	//System.out.println("Got an exception");
+		 	//System.out.println(e.getMessage());
+		 } 
+}
 
-		if (option.toLowerCase().equals("a") ){
-			userInput user = new userInput();
-			String key = userInput.insertKey();
-			System.out.println("Your key: "+ key);
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-			}
-			catch (ClassNotFoundException err) {
-				System.out.println(err);
-			}
+	public void newTable(String connectionString, String blockChainString) {  // CREATES NEW TABLE CALLED BLOCKCHAIN
+		String[] DB = connectionString.split(",");
+		String[] bc = blockChainString.split(",");
 		
-			Connection con = null;
-			try{
-				//my localhost:
-				con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
-				//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
-				if (con != null) {
-    				//System.out.println("Connected");
-				}
-				Statement stat = con.createStatement();
-				String SQL = "SELECT a_value FROM someBlockChain WHERE `a_key` = '" + key + "'";
+		 try {
+			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+			 } catch (ClassNotFoundException err){
+			 	System.out.println(err);
+			 }
+			 
+			 Connection conn = null;
+			 
+			 try {
+			 	conn = DriverManager.getConnection(DB[0],DB[1],DB[2]); // connection configuration to the mysql database
+			 	if (conn!= null){       // successful connection
+			 	//System.out.println("Connected");
+			 	
+			 	//System.out.println("Creating table...");
+				Statement stmt = conn.createStatement();
+				
+			String sql = " CREATE TABLE someBlockChain " +
+							"(sellerID INTEGER, " +
+							"  buyerID INTEGER, " +
+							"transactionAmt INTEGER, " +
+							"levelDifficulty INTEGER, " +
+							"previousHash VARCHAR(40), " +
+							"a_key VARCHAR(50), " +
+							"a_value VARCHAR(18), " +
+							"a_message VARCHAR(1000), " +
+							"enc_seed INTEGER)";
+							
+				
+				stmt.executeUpdate(sql);
+				
+				sql = "SELECT * FROM someBlockChain WHERE `a_key` = '" + bc[5] + "'";
 				ResultSet rs;
-				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
+				rs = stmt.executeQuery(sql);
 				String value = " ";
 				while (rs.next()){
 					value = rs.getString("a_value");
-					System.out.println("The value is: " + value);
-				}		
+				}
 				if ( value == " "){
-					System.out.println("System unable to get your request, make sure the key exists" );
+					sql = "INSERT INTO someBlockChain VALUES ('" + Integer.parseInt(bc[0]) +"','"+ 
+							  Integer.parseInt(bc[1]) +"','"+ 
+							  Integer.parseInt(bc[2]) +"','"+ 
+							  Integer.parseInt(bc[3]) +"','"+ 
+							  bc[4] +"','"+ 
+							  bc[5] +"','"+ 
+							  bc[6] +"','"+
+							  bc[7] +"','"+
+							  Integer.parseInt(bc[8]) +"')";
+					stmt.executeUpdate(sql);
+					
 				}
-				con.close();
-			}
-			catch (SQLException e){
-				System.out.println(e.getMessage());
-			}
-		}
-		else if(option.toLowerCase().equals("b") ){
-			try{BlockChain block = new BlockChain();//if statement require here to check if a blockchain exist already
-				createTable table = new createTable();
-				RSA keyCreater = new RSA();
-			  	// System.out.println(block.isEmpty ());
-			 	userInput user = new userInput();
-				String key = userInput.insertKey();
-				String userValue = userInput.insertValue();
-				String privateKeyName;
-				String publicKeyName;
-				System.out.println("Your key: "+ key);
-				System.out.println("Your value: "+ userValue);
-				System.out.println("Insert the name for the private key file: ");
-				privateKeyName = user_input.next( );
-				System.out.println("Your private key file name is: " +privateKeyName );
-				publicKeyName = "public.key";
-				int buyerID = 101;
-				int sellerID = 122;
-				int transactionAmount = key.length();
-				int levelOfDifficulty = userValue.length();
-				keyCreater.generateKeys(publicKeyName,privateKeyName);
-				String publicKeyString = getPublicKeyString();
-				// insert random number in db
-				Random rand = new Random();
-				int randomNum = rand.nextInt(100);
-				String message = generateRandomString(10,randomNum);
-				byte[] encryptedMessage = keyCreater.encryptMessage(publicKeyName,message);
-				String encryptedMDB = DatatypeConverter.printBase64Binary(encryptedMessage);
-				System.out.println("THe encrypted string : " + encryptedMDB);
-				// String encryptedMDB = new String(encryptedMessage);
-				// need to add the randomNum and the encryptedMessageToAddToDatabase to add to the database
-				
-			 	
-			 	block.insert(buyerID,sellerID,transactionAmount,levelOfDifficulty,key,userValue,encryptedMDB,randomNum);
-				//block.insert(121,122,1,5,"google.com","74.125.224.72");
-				//block.insert(123,124,8,4,"facebook.com","69.63.176.13");
-				//block.insert(125,126,2,4,"github.com","192.30.252.0");
-				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
-			 	
-			 	table.duplicateBchain(connectionString,false);
-			 	BlockChainServer.sendUpdate(key);
-			}
-			catch(Exception e){e.printStackTrace();}
-		}
-
-		else if(option.toLowerCase().equals("c" )){
-			try{
-				System.out.println("Enter the name of the Domain you want to change: ");
-				String key = user_input.next( );
-				System.out.println("Enter the location of the private key: ");
-				// Check whether they have the right to update the key
-				RSA transferKey = new RSA();
-				String privateKey = user_input.next( );
-				//System.out.println(privateKey);
-				createTable table = new createTable();
-				int seed = table.getSeed(key,connectionString);
-				System.out.println("seed: " +seed);
-				String originalMessage = generateRandomString(10,seed);
-				System.out.println("originalMessage: " + originalMessage);
-				String message = table.getEncryptedMessage(key,connectionString);
-				//byte[] message2 = message.getBytes();
-				System.out.println("encrypted: "+ message);
-				byte[] messageText = transferKey.decryptMessage(privateKey,message);
-				String decryptedMessage = new String(messageText);
-				//Function to get originalText
-				if(decryptedMessage.equals(originalMessage)){
-					// update the database
-					table.updateDomain(key,connectionString);
-					System.out.println("Your domain has been changed");
-										
-					// update everyones database
-					BlockChainServer.sendUpdate(key);
-				
-				}
-			}
-			catch(Exception e){e.printStackTrace();}
-		}
-		else if(option.toLowerCase().equals("d" )){
-			System.out.println("You have quit the program");
-			System.exit(0);
-		}
-		else{
-			System.out.println("You input did not make sense, try again!");
-			mainMenu();
-		}
-		
-	System.out.println("----------------------");
-	System.out.println();
-	mainMenu();
+			 	}
+			 }
+			 catch (SQLException e){
+			 	//System.out.println("Got an exception");
+			 	//System.out.println(e.getMessage());
+			 }
 	}
 	
-	public static String generateRandomString(int length, int seed) {
-	      char[] values = {'a','b','c','d','e','f','g','h','i','j',
-	               'k','l','m','n','o','p','q','r','s','t',
-	               'u','v','w','x','y','z','0','1','2','3',
-	               '4','5','6','7','8','9'};
+	public static String concatFields() {  // CONCATENATES FIELDS INTO A STRING
+		String concatString = "";
+		 try {
+			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+			 } catch (ClassNotFoundException err){
+			 	System.out.println(err);
+			 }
+			 
+			 Connection conn = null;
+			 
+			 try {
+			 conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+			 if (conn!= null){       // successful connection
+			 	//System.out.println("Connected");
 
-	      String out = "";
-	      Random random = new Random(seed);
-
-	      for (int i=0;i<length;i++) {
-	          int idx=random.nextInt(values.length);
-	          out += values[idx];
-	      }
-	      return out;
-	      }
-
-	  public static String getPublicKeyString(){
-	  	// FileWriter writer = null;
-		BufferedReader reader = null;
-		String total = "";
-		try {
-			// writer = new FileWriter("test12.key");
-		    File file = new File("public.key");
-		    reader = new BufferedReader(new FileReader(file));
-
-		    String line;
-		    while ((line = reader.readLine()) != null) {
-		        total = total +line ;
-		        
-		    }
-		    // System.out.println(total);
-			// writer.write(total);
-		}catch (IOException e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        reader.close();
-		        //writer.close();
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		    }
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM someBlockChain";
+			ResultSet rs = stmt.executeQuery(sql);
+			//String sql = "SELECT CONCAT(sellerID,',',buyerID,',',transactionAmount,',',levelDifficulty,',',previousHash,',',a_key,',',a_value,',',publicKey) FROM someBlockChain";
+			
+			
+			while (rs.next()){
+				concatString += rs.getString("sellerID"); concatString +=  ",";
+				concatString += rs.getString("buyerID" ); concatString +=  ",";
+				concatString += rs.getString("transactionAmount" ); concatString +=  ",";
+				concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
+				concatString += rs.getString("previousHash" ); concatString +=  ",";
+				concatString += rs.getString("a_key" ); concatString +=  ",";
+				concatString += rs.getString("a_value" ); concatString +=  ",";
+				concatString += rs.getString("publicKey" ); concatString += "####";
+				
+			}
+			
+				
+			 	}
+			 }
+			 catch (SQLException e){    // if failed connection
+			 	System.out.println("Got an exception");
+			 	System.out.println(e.getMessage());
+			 }
+			 
+			 return concatString;
 		}
-		return total;
-	  }
+	
+	public void printTable() {			// PRINTS the someBlockChain table
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try{
+			//my localhost:
+			//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
+			con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM someBlockChain");
+			
+
+			while (rs.next()){
+				// some stuff
+				int sellID = rs.getInt(1);
+				int buyID = rs.getInt(2);
+				int transAmt = rs.getInt(3);
+				int levelDiff = rs.getInt(4);
+				String prevHash = rs.getString(5);
+				String aKey = rs.getString(6);
+				String aValue = rs.getString(7);
+				String pubKey = rs.getString(8);
+				
+				System.out.printf("%6d\t %6d\t %3d\t %3d\t %40s\t %50s\t %20s\t %1000s\t", sellID, buyID, transAmt, levelDiff, prevHash, aKey, aValue, pubKey);
+				System.out.println();
+				}
+			
+			System.out.println();
+			
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (st != null) st.close();
+				if (con != null) con.close();
+			} catch (SQLException e){
+				
+			}
+		}
+	}
+	
+	public String getEncryptedMessage(String key,String connectionString){
+		String[] DB = connectionString.split(",");
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		String message = " ";
+		try{
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			String SQL = "SELECT a_message FROM someBlockChain WHERE `a_key` = '" + key + "'";
+			ResultSet rs;
+			rs = stat.executeQuery(SQL);
+			while (rs.next()){
+				message = rs.getString("a_message");
+			}		
+			if ( message == " "){
+				System.out.println("System unable to get your request, make sure the key exists" );
+			}
+			con.close();
+			return message;
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return message;
+	}
+	
+	public int getSeed(String key,String connectionString){
+		String[] DB = connectionString.split(",");
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		int seed = -1;
+		try{
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			String SQL = "SELECT enc_seed FROM someBlockChain WHERE `a_key` = '" + key + "'";
+			ResultSet rs;
+			rs = stat.executeQuery(SQL);
+			while (rs.next()){
+				seed = rs.getInt("enc_seed");
+			}		
+			if ( seed == -1){
+				System.out.println("System unable to get your request, make sure the key exists" );
+			}
+			con.close();
+			return seed;
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return seed;
+	}
+	
+	public void updateDomain(String key,String connectionString){
+		String[] DB = connectionString.split(",");
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException err) {
+			System.out.println(err);
+		}
+	
+		Connection con = null;
+		try{
+			//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+			con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+			if (con != null) {
+				//System.out.println("Connected");
+			}
+			Statement stat = con.createStatement();
+			System.out.println("Enter the value: ");
+			Scanner user_input = new Scanner( System.in );
+			String value = user_input.next( );
+			String SQL = "Update someBlockChain SET `a_value` = '" + value + "' WHERE `a_key` = '" + key + "'";
+			stat.executeUpdate(SQL);
+			con.close();
+		}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public String newCon() {
+	   // JDBC driver name and database URL
+	   String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	   String DB_URL = "jdbc:mysql://localhost:3306/";
+
+	   //  Database credentials
+	   Scanner user_input = new Scanner( System.in );
+	   System.out.println("Input localhost Username");
+	   String USER = user_input.next( );
+	   System.out.println("Input localhost password");
+	   String PASS = user_input.next( );
+	   
+	  Connection conn = null;
+	  Statement stmt = null;
+	   try{
+	      //STEP 2: Register JDBC driver
+	      Class.forName("com.mysql.jdbc.Driver");
+
+	      //STEP 3: Open a connection
+	      //System.out.println("Connecting to database...");
+	      conn = DriverManager.getConnection(DB_URL+"?useSSL=false", USER, PASS);
+
+	      //STEP 4: Execute a query
+	      //System.out.println("Creating database...");
+	      stmt = conn.createStatement();
+	      
+	      String sql = "CREATE DATABASE gprojectdns";
+	      stmt.executeUpdate(sql);
+	      //System.out.println("Database created successfully...");
+	   }catch(SQLException se){
+	      //Handle errors for JDBC
+	      //se.printStackTrace();
+	   }catch(Exception e){
+	      //Handle errors for Class.forName
+	      //e.printStackTrace();
+	   }
+	   String conString = "jdbc:mysql://localhost:3306/gprojectDns?useSSL=false,"+USER+","+PASS;
+	   return conString;
+	}
 }
