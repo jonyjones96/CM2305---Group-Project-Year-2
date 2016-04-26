@@ -1,5 +1,3 @@
-
-
 import java.util.Scanner;
 import java.sql.*;
 import java.util.Date;
@@ -10,24 +8,37 @@ import javax.xml.bind.DatatypeConverter;
 public class Start{
 
 	public static void main(String args[]){
-		new Thread()
-		    {
-		    public void run() {
-		    	try {
-		    		BlockChainServer.startListening();    	
-		    	}
-		    	catch(IOException e) {}
-		    }
-		    }.start();
+		boolean New = true;
+		if(New == true){
+			createTable table = new createTable();
+			String connectionString = table.newCon();
+			//System.out.println(connectionString);
+			
+			try {
+				File file = new File("localhost.txt");
 
-		new Thread()
-		    {
-		    public void run() {
-		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
-		    }
-		    }.start();
+				if (!file.exists()) {
+					file.createNewFile();
+				}
 
-		mainMenu();
+				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(connectionString);
+				bw.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			String blockChainString = "123,123,10,6,abc,will.com,123,123,123,38"; //blockChainString from connection"
+			table.newTable(connectionString,blockChainString);
+			table.duplicateBchain(connectionString,true);
+			
+			mainMenu();
+		}
+		else{
+			mainMenu();
+		}
 	}
 	public static void mainMenu(){	
 		System.out.println("Welcome to the Decentralised DNS");
@@ -35,12 +46,26 @@ public class Start{
 		System.out.println("A-Query a Domain ");
 		System.out.println("B-Register a Domain ");
 		System.out.println("C-Change the value of a Domain");
-
+		System.out.println("D-Quit");
+		
+		String connectionString = null;
+		String[] DB = null;
+		//need some code here to get the connectionString
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+			connectionString = in.readLine();
+			DB = connectionString.split(",");
+			//System.out.println(connectionString);
+		}
+		catch(IOException ex){
+			System.out.println(ex);
+		}
+		
 		Scanner user_input = new Scanner( System.in );
 		String option;
 		option = user_input.next( );
 
-		if (option.equals("a") ){
+		if (option.toLowerCase().equals("a") ){
 			userInput user = new userInput();
 			String key = userInput.insertKey();
 			System.out.println("Your key: "+ key);
@@ -54,8 +79,8 @@ public class Start{
 			Connection con = null;
 			try{
 				//my localhost:
-				//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gproject","root","Willtheshiba12");
-				con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
+				con = DriverManager.getConnection(DB[0],DB[1],DB[2]);
+				//con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249","rodim8");
 				if (con != null) {
     				//System.out.println("Connected");
 				}
@@ -77,7 +102,7 @@ public class Start{
 				System.out.println(e.getMessage());
 			}
 		}
-		else if(option.equals("b") ){
+		else if(option.toLowerCase().equals("b") ){
 			try{BlockChain block = new BlockChain();//if statement require here to check if a blockchain exist already
 				createTable table = new createTable();
 				RSA keyCreater = new RSA();
@@ -116,14 +141,12 @@ public class Start{
 				//block.insert(125,126,2,4,"github.com","192.30.252.0");
 				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
 			 	
-			 	table.duplicateBchain();
-
-			 	BlockChainServer.sendUpdate(key);
+			 	table.duplicateBchain(connectionString,false);
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
 
-		else if(option.equals("c" )){
+		else if(option.toLowerCase().equals("c" )){
 			try{
 				System.out.println("Enter the name of the Domain you want to change: ");
 				String key = user_input.next( );
@@ -133,11 +156,11 @@ public class Start{
 				String privateKey = user_input.next( );
 				//System.out.println(privateKey);
 				createTable table = new createTable();
-				int seed = table.getSeed(key);
+				int seed = table.getSeed(key,connectionString);
 				System.out.println("seed: " +seed);
 				String originalMessage = generateRandomString(10,seed);
 				System.out.println("originalMessage: " + originalMessage);
-				String message = table.getEncryptedMessage(key);
+				String message = table.getEncryptedMessage(key,connectionString);
 				//byte[] message2 = message.getBytes();
 				System.out.println("encrypted: "+ message);
 				byte[] messageText = transferKey.decryptMessage(privateKey,message);
@@ -145,19 +168,31 @@ public class Start{
 				//Function to get originalText
 				if(decryptedMessage.equals(originalMessage)){
 					// update the database
-					table.updateDomain(key);
+					table.updateDomain(key,connectionString);
 					System.out.println("Your domain has been changed");
 										
 					// update everyones database
-					BlockChainServer.sendUpdate(key);
 				
 				}
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
-		System.out.println("----------------------");
-		System.out.println();
-		mainMenu();
+		else if(option.toLowerCase().equals("d" )){
+			System.out.println("You have quit the program");
+		}
+		else{
+			System.out.println("You input did not make sense, try again!");
+			mainMenu();
+		}
+		
+		System.out.println("Continue? [Y/N]");
+		String next = user_input.next( );
+		if(next.toLowerCase().equals("y") ){
+			mainMenu();
+		}
+		else{
+			System.out.println("You have quit the program");
+		}
 	}
 	
 	public static String generateRandomString(int length, int seed) {
