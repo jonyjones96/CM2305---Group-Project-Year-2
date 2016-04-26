@@ -1,3 +1,5 @@
+
+
 import java.util.Scanner;
 import java.sql.*;
 import java.util.Date;
@@ -41,7 +43,7 @@ public class Start{
     				//System.out.println("Connected");
 				}
 				Statement stat = con.createStatement();
-				String SQL = "SELECT a_value FROM BlockChain WHERE `a_key` = '" + key + "'";
+				String SQL = "SELECT a_value FROM someBlockChain WHERE `a_key` = '" + key + "'";
 				ResultSet rs;
 				rs = stat.executeQuery(SQL); /*WHERE 'key'='abc123'*/
 				String value = " ";
