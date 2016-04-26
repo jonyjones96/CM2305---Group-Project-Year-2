@@ -26,7 +26,6 @@ public class Start{
 		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
 		    }
 		    }.start();
-		 }
 
 		mainMenu();
 	}
