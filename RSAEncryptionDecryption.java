@@ -16,6 +16,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import javax.crypto.Cipher;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * 
@@ -104,15 +105,16 @@ public class RSAEncryptionDecryption {
 	 * @param data
 	 * @throws IOException
 	 */
-	public byte[] decryptData(byte[] data) throws IOException {
+	public byte[] decryptData(String data) throws IOException {
 		System.out.println("\n----------------DECRYPTION STARTED------------");
 		byte[] descryptedData = null;
+		byte[] data2 = DatatypeConverter.parseBase64Binary(data);
 		
 		try {
 			PrivateKey privateKey = readPrivateKeyFromFile(PRIVATE_KEY_FILE);
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
-			descryptedData = cipher.doFinal(data);
+			descryptedData = cipher.doFinal(data2);
 			// System.out.println("Decrypted Data: " + new String(descryptedData));
 			
 		} catch (Exception e) {
