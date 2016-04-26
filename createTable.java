@@ -1,3 +1,5 @@
+package groupProject;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -88,11 +90,20 @@ public class createTable {
 				sql = "SELECT * FROM someBlockChain WHERE `a_key` = '" + bc[5] + "'";
 				ResultSet rs;
 				rs = stmt.executeQuery(sql);
-				String value = " ";
-				while (rs.next()){
-					value = rs.getString("a_value");
+				if (rs.next()){
+					sql = "UPDATE someBlockChain "
+							+ "SET sellerID='"+bc[0]+"',"
+							+ "buyerID='"+bc[1]+"',"
+							+ "transactionAmt='"+bc[2]+"',"
+							+ "levelDifficulty='"+bc[3]+"',"
+							+ "previousHash='"+bc[4]+"',"
+							+ "a_value='"+bc[6]+"',"
+							+ "a_message='"+bc[7]+"',"
+							+ "enc_seed='"+bc[8]+"',"						
+							+ "WHERE `a_key` = '" + bc[5] + "'";
+					stmt.executeUpdate(sql);
 				}
-				if ( value == " "){
+				else{
 					sql = "INSERT INTO someBlockChain VALUES ('" + Integer.parseInt(bc[0]) +"','"+ 
 							  Integer.parseInt(bc[1]) +"','"+ 
 							  Integer.parseInt(bc[2]) +"','"+ 
