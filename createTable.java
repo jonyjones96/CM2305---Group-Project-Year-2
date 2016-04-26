@@ -328,7 +328,7 @@ public class createTable {
 	      //System.out.println("Creating database...");
 	      stmt = conn.createStatement();
 	      
-	      String sql = "CREATE DATABASE gprojectdns";
+	      String sql = "CREATE DATABASE gprojectDns";
 	      stmt.executeUpdate(sql);
 	      //System.out.println("Database created successfully...");
 	   }catch(SQLException se){

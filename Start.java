@@ -206,6 +206,7 @@ public class Start{
 		}
 		else{
 			System.out.println("You have quit the program");
+			System.exit(0);
 		}
 	System.out.println("----------------------");
 	System.out.println();
