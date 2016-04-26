@@ -10,8 +10,6 @@ public class BlockChainClient extends Thread {
     try {
       Socket clientSocket = new Socket(ipAddress, 4567);
 
-      System.out.println("Connected to " + ipAddress + ":4567");
-
       connection = new BlockChainConnection(ipAddress, 4567, clientSocket);
       servers.add(connection);
       start();
@@ -29,7 +27,6 @@ public class BlockChainClient extends Thread {
       String inLine;
       while((inLine = in.readLine()) != null) {
         try {
-          System.out.println(inLine);
           String messageType = inLine.split(":")[0];
           String messageContent = inLine.split(":")[1];
 
