@@ -117,8 +117,8 @@ public class createTable {
 			 	}
 			 }
 			 catch (SQLException e){
-			 	//System.out.println("Got an exception");
-			 	//System.out.println(e.getMessage());
+			 	System.out.println("Got an exception");
+			 	System.out.println(e.getMessage());
 			 }
 	}
 	

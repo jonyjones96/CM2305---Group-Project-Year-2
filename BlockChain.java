@@ -138,6 +138,8 @@ class BlockChain{
 		 	pstmt.setString(8, a_message);
 		 	pstmt.setInt(9, enc_seed);
 		 	pstmt.executeUpdate();
+		 	
+		 	conn.close();
 		 	}
 		 }
 		 catch (SQLException e){    // if failed connection
