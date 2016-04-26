@@ -25,22 +25,30 @@ public class Start{
  		 }.start();
 
 		boolean New = true;
+		createTable table = new createTable();
+		String connectionString = null;
 		if(New == true){
-			createTable table = new createTable();
-			String connectionString = table.newCon();
 			//System.out.println(connectionString);
-			
+			try {
+ 				BufferedReader in = new BufferedReader(new FileReader("localhost.txt"));
+ 				connectionString = in.readLine();
+ 				//System.out.println(connectionString);
+ 			}
+ 			catch(IOException ex){
+ 				//System.out.println(ex);
+ 			}	
 			try {
 				File file = new File("localhost.txt");
 
 				if (!file.exists()) {
+					connectionString = table.newCon();
 					file.createNewFile();
-				}
 
-				FileWriter fw = new FileWriter(file.getAbsoluteFile());
-				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(connectionString);
-				bw.close();
+					FileWriter fw = new FileWriter(file.getAbsoluteFile());
+					BufferedWriter bw = new BufferedWriter(fw);
+					bw.write(connectionString);
+					bw.close();
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();

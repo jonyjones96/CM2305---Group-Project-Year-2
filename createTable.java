@@ -103,50 +103,6 @@ public class createTable {
 			 }
 	}
 	
-	public static String concatFields() {  // CONCATENATES FIELDS INTO A STRING
-		String concatString = "";
-		 try {
-			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
-			 } catch (ClassNotFoundException err){
-			 	System.out.println(err);
-			 }
-			 
-			 Connection conn = null;
-			 
-			 try {
-			 conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
-			 if (conn!= null){       // successful connection
-			 	//System.out.println("Connected");
-
-			Statement stmt = conn.createStatement();
-			String sql = "SELECT * FROM someBlockChain";
-			ResultSet rs = stmt.executeQuery(sql);
-			//String sql = "SELECT CONCAT(sellerID,',',buyerID,',',transactionAmount,',',levelDifficulty,',',previousHash,',',a_key,',',a_value,',',publicKey) FROM someBlockChain";
-			
-			
-			while (rs.next()){
-				concatString += rs.getString("sellerID"); concatString +=  ",";
-				concatString += rs.getString("buyerID" ); concatString +=  ",";
-				concatString += rs.getString("transactionAmount" ); concatString +=  ",";
-				concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
-				concatString += rs.getString("previousHash" ); concatString +=  ",";
-				concatString += rs.getString("a_key" ); concatString +=  ",";
-				concatString += rs.getString("a_value" ); concatString +=  ",";
-				concatString += rs.getString("publicKey" ); concatString += "####";
-				
-			}
-			
-				
-			 	}
-			 }
-			 catch (SQLException e){    // if failed connection
-			 	System.out.println("Got an exception");
-			 	System.out.println(e.getMessage());
-			 }
-			 
-			 return concatString;
-		}
-	
 	public void printTable() {			// PRINTS the someBlockChain table
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
