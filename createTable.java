@@ -97,8 +97,8 @@ public class createTable {
 							+ "previousHash='"+bc[4]+"',"
 							+ "a_value='"+bc[6]+"',"
 							+ "a_message='"+bc[7]+"',"
-							+ "enc_seed='"+bc[8]+"',"						
-							+ "WHERE `a_key` = '" + bc[5] + "'";
+							+ "enc_seed='"+bc[8]+"'"						
+							+ " WHERE `a_key` = '" + bc[5] + "'";
 					stmt.executeUpdate(sql);
 				}
 				else{
