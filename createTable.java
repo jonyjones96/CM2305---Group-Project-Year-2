@@ -98,8 +98,8 @@ public class createTable {
 			 	}
 			 }
 			 catch (SQLException e){
-			 	//System.out.println("Got an exception");
-			 	//System.out.println(e.getMessage());
+			 	System.out.println("Got an exception");
+			 	System.out.println(e.getMessage());
 			 }
 	}
 	
@@ -289,7 +289,7 @@ public class createTable {
 	      //System.out.println("Database created successfully...");
 	   }catch(SQLException se){
 	      //Handle errors for JDBC
-	      //se.printStackTrace();
+	      se.printStackTrace();
 	   }catch(Exception e){
 	      //Handle errors for Class.forName
 	      //e.printStackTrace();
