@@ -10,6 +10,24 @@ import javax.xml.bind.DatatypeConverter;
 public class Start{
 
 	public static void main(String args[]){
+		new Thread()
+		    {
+		    public void run() {
+		    	try {
+		    		BlockChainServer.startListening();    	
+		    	}
+		    	catch(IOException e) {}
+		    }
+		    }.start();
+
+		new Thread()
+		    {
+		    public void run() {
+		    	BlockChainClient client = new BlockChainClient("10.0.0.8");
+		    }
+		    }.start();
+		 }
+
 		mainMenu();
 	}
 	public static void mainMenu(){	
@@ -100,6 +118,8 @@ public class Start{
 				//block.insert(127,128,5,5,"bbc.co.uk","212.58.246.94");
 			 	
 			 	table.duplicateBchain();
+
+			 	BlockChainServer.sendUpdate(key);
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
@@ -130,11 +150,15 @@ public class Start{
 					System.out.println("Your domain has been changed");
 										
 					// update everyones database
+					BlockChainServer.sendUpdate(key);
 				
 				}
 			}
 			catch(Exception e){e.printStackTrace();}
 		}
+		System.out.println("----------------------");
+		System.out.println();
+		mainMenu();
 	}
 	
 	public static String generateRandomString(int length, int seed) {
