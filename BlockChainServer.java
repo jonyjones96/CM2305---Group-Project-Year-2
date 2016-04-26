@@ -84,7 +84,7 @@ public class BlockChainServer extends Thread {
             String concatString = "";
             concatString += rs.getString("sellerID"); concatString +=  ",";
             concatString += rs.getString("buyerID" ); concatString +=  ",";
-            concatString += rs.getString("transactionAmount" ); concatString +=  ",";
+            concatString += rs.getString("transactionAmt" ); concatString +=  ",";
             concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
             concatString += rs.getString("previousHash" ); concatString +=  ",";
             concatString += rs.getString("a_key" ); concatString +=  ",";
@@ -136,7 +136,7 @@ public class BlockChainServer extends Thread {
             String concatString = "";
             concatString += rs.getString("sellerID"); concatString +=  ",";
             concatString += rs.getString("buyerID" ); concatString +=  ",";
-            concatString += rs.getString("transactionAmount" ); concatString +=  ",";
+            concatString += rs.getString("transactionAmt" ); concatString +=  ",";
             concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
             concatString += rs.getString("previousHash" ); concatString +=  ",";
             concatString += rs.getString("a_key" ); concatString +=  ",";
