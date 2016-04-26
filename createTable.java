@@ -71,7 +71,7 @@ public class createTable {
 			 	//System.out.println("Creating table...");
 				Statement stmt = conn.createStatement();
 				
-			String sql = " CREATE TABLE IF NOT EXISTS someBlockChain " +
+			String sql = " CREATE TABLE someBlockChain " +
 							"(sellerID INTEGER, " +
 							"  buyerID INTEGER, " +
 							"transactionAmt INTEGER, " +
@@ -85,23 +85,77 @@ public class createTable {
 				
 				stmt.executeUpdate(sql);
 				
-				sql = "INSERT INTO someBlockChain VALUES ('" + Integer.parseInt(bc[0]) +"','"+ 
-															  Integer.parseInt(bc[1]) +"','"+ 
-															  Integer.parseInt(bc[2]) +"','"+ 
-															  Integer.parseInt(bc[3]) +"','"+ 
-															  bc[4] +"','"+ 
-															  bc[5] +"','"+ 
-															  bc[6] +"','"+
-															  bc[7] +"','"+
-															  Integer.parseInt(bc[8]) +"')";
-				stmt.executeUpdate(sql);
+				sql = "SELECT * FROM someBlockChain WHERE `a_key` = '" + bc[5] + "'";
+				ResultSet rs;
+				rs = stmt.executeQuery(sql);
+				String value = " ";
+				while (rs.next()){
+					value = rs.getString("a_value");
+				}
+				if ( value == " "){
+					sql = "INSERT INTO someBlockChain VALUES ('" + Integer.parseInt(bc[0]) +"','"+ 
+							  Integer.parseInt(bc[1]) +"','"+ 
+							  Integer.parseInt(bc[2]) +"','"+ 
+							  Integer.parseInt(bc[3]) +"','"+ 
+							  bc[4] +"','"+ 
+							  bc[5] +"','"+ 
+							  bc[6] +"','"+
+							  bc[7] +"','"+
+							  Integer.parseInt(bc[8]) +"')";
+					stmt.executeUpdate(sql);
+					
+				}
 			 	}
 			 }
 			 catch (SQLException e){
+			 	//System.out.println("Got an exception");
+			 	//System.out.println(e.getMessage());
+			 }
+	}
+	
+	public static String concatFields() {  // CONCATENATES FIELDS INTO A STRING
+		String concatString = "";
+		 try {
+			 	Class.forName("com.mysql.jdbc.Driver");      // driver used for mysql configuration in Java
+			 } catch (ClassNotFoundException err){
+			 	System.out.println(err);
+			 }
+			 
+			 Connection conn = null;
+			 
+			 try {
+			 conn = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1314249","c1314249", "rodim8" ); // connection configuration to the mysql database
+			 if (conn!= null){       // successful connection
+			 	//System.out.println("Connected");
+
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM someBlockChain";
+			ResultSet rs = stmt.executeQuery(sql);
+			//String sql = "SELECT CONCAT(sellerID,',',buyerID,',',transactionAmount,',',levelDifficulty,',',previousHash,',',a_key,',',a_value,',',publicKey) FROM someBlockChain";
+			
+			
+			while (rs.next()){
+				concatString += rs.getString("sellerID"); concatString +=  ",";
+				concatString += rs.getString("buyerID" ); concatString +=  ",";
+				concatString += rs.getString("transactionAmount" ); concatString +=  ",";
+				concatString += rs.getString("levelDifficulty" ); concatString +=  ",";
+				concatString += rs.getString("previousHash" ); concatString +=  ",";
+				concatString += rs.getString("a_key" ); concatString +=  ",";
+				concatString += rs.getString("a_value" ); concatString +=  ",";
+				concatString += rs.getString("publicKey" ); concatString += "####";
+				
+			}
+			
+				
+			 	}
+			 }
+			 catch (SQLException e){    // if failed connection
 			 	System.out.println("Got an exception");
 			 	System.out.println(e.getMessage());
 			 }
-	}
+			 
+			 return concatString;
+		}
 	
 	public void printTable() {			// PRINTS the someBlockChain table
 		try {
@@ -284,12 +338,12 @@ public class createTable {
 	      //System.out.println("Creating database...");
 	      stmt = conn.createStatement();
 	      
-	      String sql = "CREATE DATABASE gprojectDns";
+	      String sql = "CREATE DATABASE gprojectdns";
 	      stmt.executeUpdate(sql);
 	      //System.out.println("Database created successfully...");
 	   }catch(SQLException se){
 	      //Handle errors for JDBC
-	      se.printStackTrace();
+	      //se.printStackTrace();
 	   }catch(Exception e){
 	      //Handle errors for Class.forName
 	      //e.printStackTrace();
